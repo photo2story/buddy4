@@ -1,7 +1,3 @@
-# Main.py
-
-# Main.py
-
 from flask import Flask
 from threading import Thread
 import os
@@ -28,8 +24,6 @@ def keep_alive():
 # Make sure to call keep_alive() before starting the Discord bot
 keep_alive()
 
-# Your Discord bot setup and run logic should follow here
-
 import asyncio
 import os
 from datetime import datetime
@@ -41,7 +35,7 @@ from discord.ext import commands
 from flask import Flask
 import pprint
 
-from buy_stock import buy_us_stock, sell_us_stock  # buy_stock.py 파일을 가져옵니다.
+from buy_stock import buy_us_stock, sell_us_stock
 from estimate_stock import estimate_snp, estimate_stock
 from get_account_balance import (
     calculate_buyable_balance,
@@ -52,7 +46,7 @@ from get_account_balance import (
 )
 from get_earning import get_earning_alpha
 from get_ranking import get_ranking_alpha
-from get_ticker import load_tickers, search_tickers, get_ticker_name,update_stock_market_csv
+from get_ticker import load_tickers, search_tickers, get_ticker_name, update_stock_market_csv
 from Results_plot import plot_comparison_results, plot_results_all
 from get_compare_stock_data import merge_csv_files, load_sector_info
 from discord.ext import tasks
@@ -64,39 +58,35 @@ key = os.getenv('H_APIKEY')
 secret = os.getenv('H_SECRET')
 acc_no = os.getenv('H_ACCOUNT')
 ACC_NO_8 = os.getenv('H_ACCOUNT_8')
-# Discord 봇 토큰 및 채널 ID 가져오기
 TOKEN = os.getenv('DISCORD_APPLICATION_TOKEN')
 channel_id = os.getenv('DISCORD_CHANNEL_ID')
 
-# 감시할 주식 종목 리스트
 stocks = [
     'VOO', 'QQQ', 
     'NVDA','AMD'
 ]
-    # 'AAPL', 'GOOGL', 'MSFT','U', 'SPOT', 'PLTR','ADBE', 'TSLA', 'APTV', 'FSLR',
+
+    # 'AAPL', 'GOOGL', 'MSFT','U', 'SPOT', 'PLTR','ADBE', 'TSLA', 'APTV', 'FSLR',  
     # 'PFE', 'INMD', 'UNH',  'TDOC', 'OXY', 'FSLR', 'ALB','AMZN', 'NFLX', 'LLY', 'EL',
     # 'NKE', 'LOW', 'ADSK', 'NIO', 'F', 'BA', 'GE', 'JPM', 'BAC', 'SQ', 'HD', 'PG', 'IONQ','086520',
 
-
 start_date = "2022-01-01"
-end_date = datetime.today().strftime('%Y-%m-%d')  # 오늘 날짜 문자열로 변환하기
+end_date = datetime.today().strftime('%Y-%m-%d')
 initial_investment = 30000000
 monthly_investment = 1000000
 
 intents = discord.Intents.default()
 intents.messages = True
 intents.guilds = True
-intents.reactions = True  # 필요에 따라 추가 가능
-bot = commands.Bot(command_prefix='', intents=intents)
+intents.reactions = True
+bot = commands.Bot(command_prefix='!', intents=intents)
 
-# 봇이 준비되었을 때 실행되는 이벤트 핸들러
 @bot.event
 async def on_ready():
     print(f'Bot이 성공적으로 로그인했습니다: {bot.user.name}')
     channel = bot.get_channel(int(channel_id))
     if channel:
         await channel.send(f'Bot이 성공적으로 로그인했습니다: {bot.user.name}')
-
 
 @bot.command()
 async def buy(ctx, *args):
@@ -154,8 +144,6 @@ async def sell(ctx, *args):
 @bot.command()
 async def ping(ctx):
     await ctx.send(f'pong: {bot.user.name}')
-
-authorized_ids = [channel_id]
 
 @bot.command()
 @commands.has_role('Bot Controller')
