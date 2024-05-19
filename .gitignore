@@ -1,11 +1,11 @@
-# Visual Studio °ü·Ã ÆÄÀÏ ¹× µð·ºÅä¸® ¹«½Ã
+# Visual Studio ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ä¸® ï¿½ï¿½ï¿½ï¿½
 .vs/
 *.suo
 *.user
 *.userosscache
 *.sln.docstates
 
-# Python °ü·Ã ÆÄÀÏ ¹«½Ã
+# Python ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 __pycache__/
 *.py[cod]
 *.pyo
@@ -16,4 +16,6 @@ venv/
 ENV/
 ENV.*/
 venv.*/
-# ´Ù¸¥ ¹«½ÃÇÒ ÆÄÀÏÀÌ³ª µð·ºÅä¸®¸¦ Ãß°¡ÇÕ´Ï´Ù
+# Ignore virtual environment files
+myenv/
+.env
