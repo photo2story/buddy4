@@ -2,34 +2,14 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Activate and Build",
-            "type": "shell",
-            "command": "${workspaceFolder}/myenv/Scripts/activate; python setup.py build",
+            "label": "Activate and Run Main",
+            "type": "process",
+            "command": "cmd",
+            "args": ["/c", "${workspaceFolder}/myenv/Scripts/activate && python ${workspaceFolder}/main.py"],
             "problemMatcher": [],
             "group": {
                 "kind": "build",
                 "isDefault": true
-            },
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": false
-            },
-            "runOptions": {
-                "runOn": "default"
-            }
-        },
-        {
-            "label": "Activate and Run Main",
-            "type": "shell",
-            "command": "${workspaceFolder}/myenv/Scripts/activate; python ${workspaceFolder}/Main.py",
-            "problemMatcher": [],
-            "group": {
-                "kind": "build",
-                "isDefault": false
             },
             "presentation": {
                 "echo": true,
