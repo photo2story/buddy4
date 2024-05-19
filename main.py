@@ -51,7 +51,7 @@ intents.messages = True
 intents.message_content = True
 
 bot = commands.Bot(command_prefix='', intents=intents)  # Remove prefix
-tickers = load_tickers()  # CSV 파일에서 티커 데이터 로드
+# tickers = load_tickers()  # CSV 파일에서 티커 데이터 로드
 
 @bot.event
 async def on_ready():
