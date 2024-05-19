@@ -79,10 +79,13 @@ ACC_NO_8 = os.getenv('H_ACCOUNT_8')
 channel_id = os.getenv('DISCORD_CHANNEL_ID')
 
 stocks = [
-    'VOO', 'QQQ', 'AAPL', 'GOOGL', 'MSFT', 'U', 'SPOT', 'PLTR', 'ADBE', 'TSLA', 'APTV', 'FSLR', 'PFE', 'INMD', 'UNH',
-    'TDOC', 'OXY', 'FSLR', 'ALB', 'AMZN', 'NFLX', 'LLY', 'EL', 'NKE', 'LOW', 'ADSK', 'NIO', 'F', 'BA', 'GE', 'JPM',
-    'BAC', 'SQ', 'HD', 'PG', 'IONQ', '086520', 'NVDA', 'AMD'
+    'VOO', 'QQQ', 
+    'NVDA', 'AMD'
 ]
+
+    # 'AAPL', 'GOOGL', 'MSFT', 'U', 'SPOT', 'PLTR', 'ADBE', 'TSLA', 'APTV', 'FSLR', 'PFE', 'INMD', 'UNH',
+    # 'TDOC', 'OXY', 'FSLR', 'ALB', 'AMZN', 'NFLX', 'LLY', 'EL', 'NKE', 'LOW', 'ADSK', 'NIO', 'F', 'BA', 'GE', 'JPM',
+    # 'BAC', 'SQ', 'HD', 'PG', 'IONQ', '086520', 
 
 start_date = "2022-01-01"
 end_date = datetime.today().strftime('%Y-%m-%d')
