@@ -16,7 +16,6 @@ pyyaml
 typing
 matplotlib
 asyncio
-glob
 plotly
 tabulate
 yahoo_earnings_calendar
