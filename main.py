@@ -1,14 +1,12 @@
-# Main.py
-
 from flask import Flask
 from threading import Thread
 import os
 from dotenv import load_dotenv
+import discord
+from discord.ext import commands
 
-# .env 파일 로드
 load_dotenv()
 
-# Initialize Flask
 app = Flask('')
 
 @app.route('/')
@@ -18,28 +16,43 @@ def home():
 def run():
     app.run(host='0.0.0.0', port=int(os.getenv('PORT', 8080)))
 
-# Start the Flask server in a new thread
 def keep_alive():
     server = Thread(target=run)
     server.start()
 
-# Make sure to call keep_alive() before starting the Discord bot
 keep_alive()
 
-# Your Discord bot setup and run logic should follow here
+TOKEN = os.getenv('DISCORD_APPLICATION_TOKEN')
+CHANNEL_ID = os.getenv('DISCORD_CHANNEL_ID')
 
+intents = discord.Intents.default()
+intents.messages = True
+intents.message_content = True
+
+bot = commands.Bot(command_prefix='', intents=intents)  # Remove prefix
+
+@bot.event
+async def on_ready():
+    print(f'Bot이 성공적으로 로그인했습니다: {bot.user.name}')
+    channel = bot.get_channel(int(CHANNEL_ID))
+    if channel:
+        await channel.send(f'Bot이 성공적으로 로그인했습니다: {bot.user.name}')
+    else:
+        print(f"채널을 찾을 수 없습니다: {CHANNEL_ID}")
+
+@bot.command()
+async def ping(ctx):
+    print(f"Ping command received from {ctx.author.name}")
+    await ctx.send(f'pong: {bot.user.name}')
+
+# 여기서부터는 기존 코드에서 변경하지 않은 부분입니다.
 import asyncio
-import os
 from datetime import datetime
 import pandas as pd
 import numpy as np
-import discord
 import requests
-from discord.ext import commands
-from flask import Flask
-import pprint
-
-from buy_stock import buy_us_stock, sell_us_stock  # buy_stock.py 파일을 가져옵니다.
+from discord.ext import tasks
+from buy_stock import buy_us_stock, sell_us_stock
 from estimate_stock import estimate_snp, estimate_stock
 from get_account_balance import (
     calculate_buyable_balance,
@@ -50,47 +63,31 @@ from get_account_balance import (
 )
 from get_earning import get_earning_alpha
 from get_ranking import get_ranking_alpha
-from get_ticker import load_tickers, search_tickers, get_ticker_name,update_stock_market_csv
+from get_ticker import load_tickers, search_tickers, get_ticker_name, update_stock_market_csv
 from Results_plot import plot_comparison_results, plot_results_all
 from get_compare_stock_data import merge_csv_files, load_sector_info
-from discord.ext import tasks
 from Results_plot_mpl import plot_results_mpl
 import tracemalloc
+
 tracemalloc.start()
 
 key = os.getenv('H_APIKEY')
 secret = os.getenv('H_SECRET')
 acc_no = os.getenv('H_ACCOUNT')
 ACC_NO_8 = os.getenv('H_ACCOUNT_8')
-# Discord 봇 토큰 및 채널 ID 가져오기
-TOKEN = os.getenv('DISCORD_APPLICATION_TOKEN')
+
 channel_id = os.getenv('DISCORD_CHANNEL_ID')
 
-# 감시할 주식 종목 리스트
 stocks = [
-    'VOO', 'QQQ', 'AAPL', 'GOOGL', 'MSFT','U', 'SPOT', 'PLTR','ADBE', 'TSLA', 'APTV', 'FSLR',  'PFE', 'INMD', 'UNH',  'TDOC', 'OXY', 'FSLR', 'ALB','AMZN', 'NFLX', 'LLY', 'EL',
-    'NKE', 'LOW', 'ADSK', 'NIO', 'F', 'BA', 'GE', 'JPM', 'BAC', 'SQ', 'HD', 'PG', 'IONQ','086520','NVDA','AMD'
+    'VOO', 'QQQ', 'AAPL', 'GOOGL', 'MSFT', 'U', 'SPOT', 'PLTR', 'ADBE', 'TSLA', 'APTV', 'FSLR', 'PFE', 'INMD', 'UNH',
+    'TDOC', 'OXY', 'FSLR', 'ALB', 'AMZN', 'NFLX', 'LLY', 'EL', 'NKE', 'LOW', 'ADSK', 'NIO', 'F', 'BA', 'GE', 'JPM',
+    'BAC', 'SQ', 'HD', 'PG', 'IONQ', '086520', 'NVDA', 'AMD'
 ]
 
 start_date = "2022-01-01"
-end_date = datetime.today().strftime('%Y-%m-%d')  # 오늘 날짜 문자열로 변환하기
+end_date = datetime.today().strftime('%Y-%m-%d')
 initial_investment = 30000000
 monthly_investment = 1000000
-
-intents = discord.Intents.default()
-intents.messages = True
-intents.guilds = True
-intents.reactions = True  # 필요에 따라 추가 가능
-bot = commands.Bot(command_prefix='', intents=intents)
-
-# 봇이 준비되었을 때 실행되는 이벤트 핸들러
-@bot.event
-async def on_ready():
-    print(f'Bot이 성공적으로 로그인했습니다: {bot.user.name}')
-    channel = bot.get_channel(int(channel_id))
-    if channel:
-        await channel.send(f'Bot이 성공적으로 로그인했습니다: {bot.user.name}')
-
 
 @bot.command()
 async def buy(ctx, *args):
@@ -146,27 +143,6 @@ async def sell(ctx, *args):
     await bot.change_presence(status=discord.Status.online, activity=discord.Game("대기중"))
 
 @bot.command()
-async def ping(ctx):
-    await ctx.send(f'pong: {bot.user.name}')
-
-authorized_ids = [channel_id]
-
-@bot.command()
-@commands.has_role('Bot Controller')
-async def run(ctx):
-    if ctx.author.id in authorized_ids:
-        global is_running
-        if is_running:
-            is_running = False
-            await ctx.send("Stopping the balance check...")
-        else:
-            await ctx.send("Balance check is not running.")
-        pass
-    else:
-        await ctx.send("You do not have permission to use this command.")
-
-@bot.command()
-@commands.has_permissions(administrator=True)
 async def balance(ctx):
     global is_running
     is_running = True
@@ -210,13 +186,12 @@ async def balance(ctx):
             await asyncio.sleep(10)
 
 async def backtest_and_send(ctx, stock, option_strategy):
-    total_account_balance, total_rate, str_strategy, invested_amount, str_last_signal, min_stock_data_date, file_path,result_df = estimate_stock(
+    total_account_balance, total_rate, str_strategy, invested_amount, str_last_signal, min_stock_data_date, file_path, result_df = estimate_stock(
         stock, start_date, end_date, initial_investment, monthly_investment, option_strategy)
-    min_stock_data_date = str(min_stock_data_date)
-    min_stock_data_date = min_stock_data_date.split(' ')[0]
+    min_stock_data_date = str(min_stock_data_date).split(' ')[0]
     user_stock_file_path1 = file_path
 
-    file_path = estimate_snp(stock,'VOO', min_stock_data_date, end_date, initial_investment, monthly_investment, option_strategy,result_df)
+    file_path = estimate_snp(stock, 'VOO', min_stock_data_date, end_date, initial_investment, monthly_investment, option_strategy, result_df)
     user_stock_file_path2 = file_path
 
     name = get_ticker_name(stock)
@@ -236,7 +211,7 @@ async def backtest_and_send(ctx, stock, option_strategy):
     else:
         print('Discord 메시지 전송 성공')
 
-    plot_comparison_results(user_stock_file_path1, user_stock_file_path2, stock, 'VOO',total_account_balance, total_rate, str_strategy,invested_amount, min_stock_data_date)
+    plot_comparison_results(user_stock_file_path1, user_stock_file_path2, stock, 'VOO', total_account_balance, total_rate, str_strategy, invested_amount, min_stock_data_date)
     await bot.change_presence(status=discord.Status.online, activity=discord.Game("대기중"))
 
 @bot.command()
@@ -405,3 +380,4 @@ bot.run(TOKEN)
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=int(os.getenv("PORT", 8080)))
+# .\\myenv\\Scripts\\activate
