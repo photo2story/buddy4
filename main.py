@@ -425,4 +425,4 @@ bot.run(TOKEN)
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=int(os.getenv("PORT", 8080)))
-# .\\myenv\\Scripts\\activate
+# .\\myenv\\Scripts\\activate SHIFT-CTRL-B
