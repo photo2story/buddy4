@@ -27,6 +27,8 @@ CHANNEL_ID = os.getenv('DISCORD_CHANNEL_ID')
 
 intents = discord.Intents.default()
 intents.messages = True
+intents.message_content = True  # Add this line to enable message content intent
+
 bot = commands.Bot(command_prefix='!', intents=intents)
 
 @bot.event
@@ -44,5 +46,6 @@ async def ping(ctx):
     await ctx.send(f'pong: {bot.user.name}')
 
 bot.run(TOKEN)
+
 
 # .\\myenv\\Scripts\\activate
