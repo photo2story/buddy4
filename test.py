@@ -23,6 +23,8 @@ def keep_alive():
 keep_alive()
 
 TOKEN = os.getenv('DISCORD_APPLICATION_TOKEN')
+CHANNEL_ID = os.getenv('DISCORD_CHANNEL_ID')
+
 intents = discord.Intents.default()
 intents.messages = True
 bot = commands.Bot(command_prefix='!', intents=intents)
@@ -30,9 +32,15 @@ bot = commands.Bot(command_prefix='!', intents=intents)
 @bot.event
 async def on_ready():
     print(f'Bot이 성공적으로 로그인했습니다: {bot.user.name}')
+    channel = bot.get_channel(int(CHANNEL_ID))
+    if channel:
+        await channel.send(f'Bot이 성공적으로 로그인했습니다: {bot.user.name}')
+    else:
+        print(f"채널을 찾을 수 없습니다: {CHANNEL_ID}")
 
 @bot.command()
 async def ping(ctx):
+    print(f"Ping command received from {ctx.author.name}")
     await ctx.send(f'pong: {bot.user.name}')
 
 bot.run(TOKEN)
