@@ -16,14 +16,6 @@ def get_ticker_name(ticker, file_path='stock_market.csv'):
     name = result.iloc[0] if not result.empty else None
     return name
 
-def get_ticker_from_korean_name(name, ticker_dict):
-    """주식명으로 티커를 검색하여 반환합니다. 부분 문자열 매칭을 지원합니다."""
-    for ticker_name in ticker_dict:
-        if name in ticker_name:
-            return ticker_dict[ticker_name]
-    return None
-
-
 def get_ticker_market(ticker, file_path='stock_market.csv'):
   df = pd.read_csv(file_path)
   result = df.loc[df['Symbol'] == ticker, 'Market']
@@ -72,10 +64,10 @@ def update_stock_market_csv(file_path, tickers_to_update):
 
 
 
-def load_tickers(file_path='stock_market.csv'):
+def load_tickers():
     """CSV 파일에서 티커 데이터를 읽어 딕셔너리로 반환합니다."""
     ticker_dict = {}
-    with open(file_path, mode='r', encoding='utf-8-sig') as file:
+    with open('stock_market.csv', mode='r') as file:
         csv_reader = csv.reader(file)
         for rows in csv_reader:
             if len(rows) >= 2:
