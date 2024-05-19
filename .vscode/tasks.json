@@ -1,14 +1,47 @@
 {
-	"version": "2.0.0",
-	"tasks": [
-		{
-			"type": "npm",
-			"script": "build:dev",
-			"path": "myenv/Lib/site-packages/jupyterlab_plotly/labextension",
-			"group": "build",
-			"problemMatcher": [],
-			"label": "npm: build:dev - myenv/Lib/site-packages/jupyterlab_plotly/labextension",
-			"detail": "npm run build:lib && npm run build:nbextension && npm run build:labextension:dev"
-		}
-	]
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Activate and Build",
+            "type": "shell",
+            "command": "${workspaceFolder}/myenv/Scripts/activate && python setup.py build",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "runOptions": {
+                "runOn": "default"
+            }
+        },
+        {
+            "label": "Activate and Run Main",
+            "type": "shell",
+            "command": "${workspaceFolder}/myenv/Scripts/activate && python ${workspaceFolder}/Main.py",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "runOptions": {
+                "runOn": "default"
+            }
+        }
+    ]
 }
