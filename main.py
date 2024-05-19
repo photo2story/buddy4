@@ -10,7 +10,7 @@ import pandas as pd
 import numpy as np
 import requests
 from discord.ext import tasks
-from get_ticker import load_tickers, get_ticker_from_korean_name
+from get_ticker import load_tickers, search_tickers, get_ticker_name,update_stock_market_csv
 from buy_stock import buy_us_stock, sell_us_stock
 from estimate_stock import estimate_snp, estimate_stock
 from get_account_balance import (
