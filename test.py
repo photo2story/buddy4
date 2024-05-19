@@ -44,3 +44,5 @@ async def ping(ctx):
     await ctx.send(f'pong: {bot.user.name}')
 
 bot.run(TOKEN)
+
+# .\\myenv\\Scripts\\activate
