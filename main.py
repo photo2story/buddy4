@@ -272,7 +272,7 @@ async def earning(ctx, *args):
 async def ticker(ctx, *, query: str = None):
     print(f'Command received: ticker with query: {query}')
     if query is None:
-        await ctx.send("주식명을 입력해주세요.")
+        await ctx.send("ticker 주식명 or 티커를 입력하세요.")
         return
 
     ticker_dict = load_tickers()
