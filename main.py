@@ -270,33 +270,36 @@ async def earning(ctx, *args):
 
 @bot.command()
 async def ticker(ctx, *, query: str = None):
-    print(f'Command received: ticker with query: {query}')
+    global awaiting_ticker
     if query is None:
+        awaiting_ticker = True
         await ctx.send("주식명을 입력해주세요.")
-        return
+        print('Awaiting ticker name...')
+    else:
+        awaiting_ticker = False
+        print(f'Command received: ticker with query: {query}')
+        ticker_dict = load_tickers()
+        matching_tickers = search_tickers(query, ticker_dict)
 
-    ticker_dict = load_tickers()
-    matching_tickers = search_tickers(query, ticker_dict)
+        if not matching_tickers:
+            await ctx.send("검색 결과가 없습니다.")
+            return
 
-    if not matching_tickers:
-        await ctx.send("검색 결과가 없습니다.")
-        return
+        response_message = "검색 결과:\n"
+        response_messages = []
+        for symbol, name in matching_tickers:
+            line = f"{symbol} - {name}\n"
+            if len(response_message) + len(line) > 2000:
+                response_messages.append(response_message)
+                response_message = "검색 결과(계속):\n"
+            response_message += line
 
-    response_message = "검색 결과:\n"
-    response_messages = []
-    for symbol, name in matching_tickers:
-        line = f"{symbol} - {name}\n"
-        if len(response_message) + len(line) > 2000:
+        if response_message:
             response_messages.append(response_message)
-            response_message = "검색 결과(계속):\n"
-        response_message += line
 
-    if response_message:
-        response_messages.append(response_message)
-
-    for message in response_messages:
-        await ctx.send(message)
-    print(f'Sent messages for query: {query}')
+        for message in response_messages:
+            await ctx.send(message)
+        print(f'Sent messages for query: {query}')
 
 @bot.command()
 async def stock(ctx, *args):

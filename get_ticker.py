@@ -97,15 +97,17 @@ def get_ticker_list_all():
     return df_combined
 
 if __name__ == "__main__":
-    tickers_to_update = [
-        'VOO', 'QQQ', 'AAPL', 'GOOGL', 'MSFT', 'U', 'SPOT', 'PLTR', 'ADBE', 'TSLA', 'APTV',
-        'FSLR', 'PFE', 'INMD', 'UNH', 'TDOC', 'OXY', 'FSLR', 'ALB', 'AMZN', 'NFLX', 'LLY', 'EL',
-        'NKE', 'LOW', 'ADSK', 'NIO', 'F', 'BA', 'GE', 'JPM', 'BAC', 'SQ', 'HD', 'PG', 'IONQ', 'NVDA', 'AMD'
-    ]
-    file_path = 'stock_market.csv'
-    update_stock_market_csv(file_path, tickers_to_update)
-    info = get_stock_info('AAPL')
-    print(info)
-    market = get_ticker_market('086520', file_path='stock_market.csv')
-    print(market)
-
+    # tickers_to_update = [
+    #     'VOO', 'QQQ', 'AAPL', 'GOOGL', 'MSFT', 'U', 'SPOT', 'PLTR', 'ADBE', 'TSLA', 'APTV',
+    #     'FSLR', 'PFE', 'INMD', 'UNH', 'TDOC', 'OXY', 'FSLR', 'ALB', 'AMZN', 'NFLX', 'LLY', 'EL',
+    #     'NKE', 'LOW', 'ADSK', 'NIO', 'F', 'BA', 'GE', 'JPM', 'BAC', 'SQ', 'HD', 'PG', 'IONQ', 'NVDA', 'AMD'
+    # ]
+    # file_path = 'stock_market.csv'
+    # update_stock_market_csv(file_path, tickers_to_update)
+    # info = get_stock_info('AAPL')
+    # print(info)
+    # market = get_ticker_market('086520', file_path='stock_market.csv')
+    # print(market)
+    # 티커명 AAPL 의 이름을 가져오기
+    name = get_ticker_name('AAPL', file_path='stock_market.csv')
+    print(name)
