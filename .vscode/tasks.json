@@ -2,10 +2,10 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Activate Virtual Environment",
+            "label": "Activate Virtual Environment and Run Main Script",
             "type": "process",
-            "command": "cmd.exe",
-            "args": ["/c", "C:\\Users\\user\\OneDrive\\Work\\Source\\Repos\\buddy4\\myenv\\Scripts\\activate"],
+            "command": "powershell.exe",
+            "args": ["-Command", "& { .\\myenv\\Scripts\\Activate; python .\\main.py }"],
             "problemMatcher": [],
             "group": {
                 "kind": "build",
@@ -22,29 +22,6 @@
             "runOptions": {
                 "runOn": "default"
             }
-        },
-        {
-            "label": "Run Main Script",
-            "type": "process",
-            "command": "cmd.exe",
-            "args": ["/c", "python C:\\Users\\user\\OneDrive\\Work\\Source\\Repos\\buddy4\\main.py"],
-            "problemMatcher": [],
-            "group": {
-                "kind": "build",
-                "isDefault": false
-            },
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": false
-            },
-            "runOptions": {
-                "runOn": "default"
-            },
-            "dependsOn": "Activate Virtual Environment"
         }
     ]
 }
