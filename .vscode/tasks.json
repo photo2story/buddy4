@@ -4,7 +4,7 @@
         {
             "label": "Activate Virtual Environment and Install Requirements",
             "type": "process",
-            "command": "cmd.exe",
+            "command": "C:\\Windows\\System32\\cmd.exe",
             "args": [
                 "/c", 
                 "myenv\\Scripts\\activate && pip install -r requirements.txt && pip install mplchart-0.0.8-py3-none-any.whl"
@@ -29,7 +29,7 @@
         {
             "label": "Run Main Script",
             "type": "process",
-            "command": "cmd.exe",
+            "command": "C:\\Windows\\System32\\cmd.exe",
             "args": [
                 "/c", 
                 "myenv\\Scripts\\activate && python main.py"
