@@ -4,7 +4,7 @@
         {
             "label": "Activate and Run Main",
             "type": "process",
-            "command": "cmd",
+            "command": "cmd.exe",
             "args": ["/c", "${workspaceFolder}/myenv/Scripts/activate && python ${workspaceFolder}/main.py"],
             "problemMatcher": [],
             "group": {
