@@ -274,7 +274,7 @@ async def ticker(ctx, *, query: str = None):
         await ctx.send("주식명을 입력해주세요.")
         return
 
-    ticker_dict = load_tickers()#from get_ticker import load_tickers
+    ticker_dict = load_tickers()
     matching_tickers = search_tickers(query, ticker_dict)
 
     if not matching_tickers:
