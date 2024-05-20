@@ -274,7 +274,7 @@ async def ticker(ctx, *, query: str = None):
         await ctx.send("주식명을 입력해주세요.")
         return
 
-    ticker_dict = load_tickers()
+    ticker_dict = load_tickers()#from get_ticker import load_tickers
     matching_tickers = search_tickers(query, ticker_dict)
 
     if not matching_tickers:
@@ -389,4 +389,4 @@ bot.run(TOKEN)
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=int(os.getenv("PORT", 8080)))
-# .\\myenv\\Scripts\\activate SHIFT-CTRL-B
+# .\\myenv\\Scripts\\activate

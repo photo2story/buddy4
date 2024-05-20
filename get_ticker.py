@@ -12,7 +12,7 @@ from tradingview_ta import TA_Handler, Interval, Exchange
 
 def get_ticker_name(ticker, file_path='stock_market.csv'):
     df = pd.read_csv(file_path)
-    result = df.loc[df['Symbol'] == ticker, 'Name']
+    result = df.loc[df['Symbol'] == ticker, 'Name'] # 설명: df에서 'Symbol' 컬럼이 ticker와 같은 행의 'Name' 컬럼 값을 가져옴
     name = result.iloc[0] if not result.empty else None
     return name
 
