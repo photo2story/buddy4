@@ -270,6 +270,7 @@ async def earning(ctx, *args):
 
 @bot.command()
 async def ticker(ctx, *, query: str = None):
+    print(f'Command received: ticker with query: {query}')
     if query is None:
         await ctx.send("주식명을 입력해주세요.")
         return
@@ -295,6 +296,7 @@ async def ticker(ctx, *, query: str = None):
 
     for message in response_messages:
         await ctx.send(message)
+    print(f'Sent messages for query: {query}')
 
 @bot.command()
 async def stock(ctx, *args):

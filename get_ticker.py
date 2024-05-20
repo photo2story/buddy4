@@ -44,8 +44,9 @@ def load_tickers(file_path='stock_market.csv'):
     return ticker_dict
 
 def search_tickers(stock_name, ticker_dict):
-    stock_name_lower = stock_name.lower()
+    stock_name_lower = stock_name.lower() # convert to lower case
     return [(ticker, name) for name, ticker in ticker_dict.items() if stock_name_lower in name.lower()]
+    #설명: stock_name_lower가 name에 포함되어 있으면 ticker와 name을 반환
 
 def search_ticker_list_KR():
     url = 'http://kind.krx.co.kr/corpgeneral/corpList.do?method=download&searchType=13'
