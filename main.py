@@ -301,6 +301,17 @@ async def ticker(ctx, *, query: str = None):
             await ctx.send(message)
         print(f'Sent messages for query: {query}')
 
+@bot.event
+async def on_message(message):
+    global awaiting_ticker
+    if awaiting_ticker and message.content:
+        ctx = await bot.get_context(message)
+        if ctx.valid:
+            awaiting_ticker = False
+            await ticker(ctx, query=message.content)
+        return
+    await bot.process_commands(message)
+
 @bot.command()
 async def stock(ctx, *args):
     stock_name = ' '.join(args)
