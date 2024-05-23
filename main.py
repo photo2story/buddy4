@@ -270,8 +270,9 @@ async def earning(ctx, *args):
 
 @bot.command()
 async def ticker(ctx, *, query: str = None):
+    print(f'Command received: ticker with query: {query}')
     if query is None:
-        await ctx.send("주식명을 입력해주세요.")
+        await ctx.send("ticker 주식명 or 티커를 입력하세요.")
         return
 
     ticker_dict = load_tickers()
@@ -295,22 +296,24 @@ async def ticker(ctx, *, query: str = None):
 
     for message in response_messages:
         await ctx.send(message)
+    print(f'Sent messages for query: {query}')
 
 @bot.command()
 async def stock(ctx, *args):
     stock_name = ' '.join(args)
     await ctx.send(f'명령어로 전달된 인자: {stock_name}')
     try:
-        info_stock = str(stock_name).upper()
-        if info_stock.startswith('K '):
+        info_stock = str(stock_name).upper()  # 여기에 .upper()를 추가합니다.
+        if info_stock.startswith('K '):  # 'stock k 흥국화재'
             korean_stock_name = info_stock[2:].upper()
-            korean_stock_code = get_ticker_from_korean_name(korean_stock_name)
+            korean_stock_code = get_ticker_from_korean_name(korean_stock_name)  # 000540.KS,흥국화재,KOSPI
             if korean_stock_code is None:
                 await ctx.send(f'{korean_stock_name} 주식을 찾을 수 없습니다.')
                 return
             else:
                 info_stock = korean_stock_code
 
+        # 옵션 선택을 위한 메시지 전송
         await ctx.send(
             "백테스팅 옵션을 선택해주세요:\n"
             "1: 디폴트 옵션\n"
@@ -318,69 +321,32 @@ async def stock(ctx, *args):
             "3: 변형 적립식투자(이익금 안정화)"
         )
 
+        # check 함수 정의
         def check(m):
             return m.author == ctx.author and m.channel == ctx.channel and m.content in ['1', '2', '3']
 
         try:
-            option_msg = await bot.wait_for('message', check=check, timeout=5.0)
+            option_msg = await bot.wait_for('message', check=check, timeout=5.0)  # Wait for a valid option
             option = option_msg.content
         except asyncio.TimeoutError:
             option = '3'
             await ctx.send("시간 초과: 변형 적립식투자(이익금 안정화) 옵션을 자동으로 선택합니다.")
 
+        # 옵션 번호를 확인합니다.
         if option not in ['1', '2', '3']:
             await ctx.send("잘못된 옵션입니다. 1, 2, 또는 3 중에서 선택해주세요.")
             return
 
+        # 옵션에 따라 전략을 설정하고 백테스팅을 실행합니다.
         option_strategy = 'default' if option == '1' else 'monthly' if option == '2' else 'modified_monthly'
+        # 사용자에게 선택한 옵션에 대한 확인 메시지 전송
         option_text = '디폴트 옵션' if option == '1' else '적립식 투자' if option == '2' else '변형 적립식투자'
         await ctx.send(f"{stock_name} 주식을 {option_text}으로 검토하겠습니다.")
 
+        # 옵션에 따라 백테스트 및 결과 전송
         await backtest_and_send(ctx, info_stock, option_strategy)
         plot_results_mpl(info_stock, start_date, end_date)
-    except Exception as e:
-        await ctx.send(f'An error occurred: {e}')
-    stock_name = ' '.join(args).strip()
-    await ctx.send(f'명령어로 전달된 인자: {stock_name}')
-    try:
-        info_stock = str(stock_name).upper()
-        if info_stock.startswith('K '):
-            korean_stock_name = info_stock[2:].strip()
-            korean_stock_code = get_ticker_from_korean_name(korean_stock_name, tickers)
-            if korean_stock_code is None:
-                await ctx.send(f'{korean_stock_name} 주식을 찾을 수 없습니다.')
-                return
-            else:
-                info_stock = korean_stock_code
-
-        await ctx.send(
-            "백테스팅 옵션을 선택해주세요:\n"
-            "1: 디폴트 옵션\n"
-            "2: 적립식 투자\n"
-            "3: 변형 적립식투자(이익금 안정화)"
-        )
-
-        def check(m):
-            return m.author == ctx.author and m.channel == ctx.channel and m.content in ['1', '2', '3']
-
-        try:
-            option_msg = await bot.wait_for('message', check=check, timeout=30.0)
-            option = option_msg.content
-        except asyncio.TimeoutError:
-            option = '3'
-            await ctx.send("시간 초과: 변형 적립식투자(이익금 안정화) 옵션을 자동으로 선택합니다.")
-
-        if option not in ['1', '2', '3']:
-            await ctx.send("잘못된 옵션입니다. 1, 2, 또는 3 중에서 선택해주세요.")
-            return
-
-        option_strategy = 'default' if option == '1' else 'monthly' if option == '2' else 'modified_monthly'
-        option_text = '디폴트 옵션' if option == '1' else '적립식 투자' if option == '2' else '변형 적립식투자'
-        await ctx.send(f"{stock_name} 주식을 {option_text}으로 검토하겠습니다.")
-
-        await backtest_and_send(ctx, info_stock, option_strategy)
-        plot_results_mpl(info_stock, start_date, end_date)
-    except Exception as e:
+    except Exception as e:  # Replace Exception with more specific exceptions if possible
         await ctx.send(f'An error occurred: {e}')
 
 
@@ -425,4 +391,4 @@ bot.run(TOKEN)
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=int(os.getenv("PORT", 8080)))
-# .\\myenv\\Scripts\\activate SHIFT-CTRL-B
+# .\\myenv\\Scripts\\activate

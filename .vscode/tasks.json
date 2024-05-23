@@ -2,10 +2,13 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Activate and Run Main",
+            "label": "Activate Virtual Environment and Install Requirements",
             "type": "process",
-            "command": "cmd",
-            "args": ["/c", "${workspaceFolder}/myenv/Scripts/activate && python ${workspaceFolder}/main.py"],
+            "command": "C:\\Windows\\System32\\cmd.exe",
+            "args": [
+                "/c", 
+                "myenv\\Scripts\\activate && pip install -r requirements.txt && pip install mplchart-0.0.8-py3-none-any.whl"
+            ],
             "problemMatcher": [],
             "group": {
                 "kind": "build",
@@ -22,6 +25,32 @@
             "runOptions": {
                 "runOn": "default"
             }
+        },
+        {
+            "label": "Run Main Script",
+            "type": "process",
+            "command": "C:\\Windows\\System32\\cmd.exe",
+            "args": [
+                "/c", 
+                "myenv\\Scripts\\activate && python main.py"
+            ],
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "runOptions": {
+                "runOn": "default"
+            },
+            "dependsOn": "Activate Virtual Environment and Install Requirements"
         }
     ]
 }
