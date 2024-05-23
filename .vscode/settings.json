@@ -1,4 +1,4 @@
 // 가상 환경 설정
 {
-    "python.pythonPath": "${workspaceFolder}/myenv/Scripts/python"
+    "python.pythonPath": "${workspaceFolder}/myenv/Scripts/python.exe"
 }
