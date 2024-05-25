@@ -1,0 +1,14 @@
+{
+    "name": "My Dev Container",
+    "dockerFile": "Dockerfile",
+    "settings": {
+        "terminal.integrated.shell.linux": "/bin/bash"
+    },
+    "extensions": [
+        "ms-python.python"
+    ],
+    "remoteEnv": {
+        "DISCORD_APPLICATION_TOKEN": "${localEnv:DISCORD_APPLICATION_TOKEN}",
+        "DISCORD_CHANNEL_ID": "${localEnv:DISCORD_CHANNEL_ID}"
+    }
+}
