@@ -49,3 +49,4 @@ function addReview() {
 }
 
 document.getElementById('addReviewButton').addEventListener('click', addReview);
+

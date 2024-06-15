@@ -21,10 +21,12 @@ from Results_plot import plot_comparison_results, plot_results_all
 from get_compare_stock_data import merge_csv_files, load_sector_info
 from Results_plot_mpl import plot_results_mpl
 import tracemalloc
+from flask_cors import CORS
 
 load_dotenv()
 
 app = Flask('')
+CORS(app)
 
 @app.route('/')
 def home():
@@ -66,12 +68,12 @@ bot = commands.Bot(command_prefix='', intents=intents)  # Remove prefix
 
 @bot.event
 async def on_ready():
-    print(f'Bot이 성공적으로 로그인했습니다: {bot.user.name}')
+    print(f'Bot has successfully logged in: {bot.user.name}')
     channel = bot.get_channel(int(CHANNEL_ID))
     if channel:
-        await channel.send(f'Bot이 성공적으로 로그인했습니다: {bot.user.name}')
+        await channel.send(f'Bot has successfully logged in: {bot.user.name}')
     else:
-        print(f"채널을 찾을 수 없습니다: {CHANNEL_ID}")
+        print(f"Cannot find the channel: {CHANNEL_ID}")
 
 @bot.command()
 async def ping(ctx):
@@ -115,12 +117,12 @@ async def backtest_and_send(ctx, stock, option_strategy):
     response = requests.post(DISCORD_WEBHOOK_URL, json=message)
 
     if response.status_code != 204:
-        print('Discord 메시지 전송 실패')
+        print('Failed to send Discord message')
     else:
-        print('Discord 메시지 전송 성공')
+        print('Successfully sent Discord message')
 
     plot_comparison_results(user_stock_file_path1, user_stock_file_path2, stock, 'VOO', total_account_balance, total_rate, str_strategy, invested_amount, min_stock_data_date)
-    await bot.change_presence(status=discord.Status.online, activity=discord.Game("대기중"))
+    await bot.change_presence(status=discord.Status.online, activity=discord.Game("Waiting"))
 
 @bot.command()
 async def buddy(ctx):
@@ -136,29 +138,29 @@ async def buddy(ctx):
     path = '.'
     await loop.run_in_executor(None, merge_csv_files, path, sector_dict)
 
-    await ctx.send("백테스팅 결과가 섹터별로 정리되었습니다.")
+    await ctx.send("Backtesting results have been organized by sector.")
 
 @bot.command()
 async def ticker(ctx, *, query: str = None):
     print(f'Command received: ticker with query: {query}')
     if query is None:
-        await ctx.send("ticker 주식명 or 티커를 입력하세요.")
+        await ctx.send("Please enter ticker stock name or ticker.")
         return
 
     ticker_dict = load_tickers()
     matching_tickers = search_tickers(query, ticker_dict)
 
     if not matching_tickers:
-        await ctx.send("검색 결과가 없습니다.")
+        await ctx.send("No search results.")
         return
 
-    response_message = "검색 결과:\n"
+    response_message = "Search results:\n"
     response_messages = []
     for symbol, name in matching_tickers:
         line = f"{symbol} - {name}\n"
         if len(response_message) + len(line) > 2000:
             response_messages.append(response_message)
-            response_message = "검색 결과(계속):\n"
+            response_message = "Search results (continued):\n"
         response_message += line
 
     if response_message:
@@ -171,19 +173,19 @@ async def ticker(ctx, *, query: str = None):
 @bot.command()
 async def stock(ctx, *args):
     stock_name = ' '.join(args)
-    await ctx.send(f'명령어로 전달된 인자: {stock_name}')
+    await ctx.send(f'Arguments passed by command: {stock_name}')
     try:
-        info_stock = str(stock_name).upper()  # 여기에 .upper()를 추가합니다.
-        if info_stock.startswith('K '):  # 'stock k 흥국화재'
+        info_stock = str(stock_name).upper()  # Add .upper() here
+        if info_stock.startswith('K '):  # 'stock k Heungkuk Fire & Marine Insurance'
             korean_stock_name = info_stock[2:].upper()
-            korean_stock_code = get_ticker_from_korean_name(korean_stock_name)  # 000540.KS,흥국화재,KOSPI
+            korean_stock_code = get_ticker_from_korean_name(korean_stock_name)  # 000540.KS,Heungkuk Fire & Marine Insurance,KOSPI
             if korean_stock_code is None:
-                await ctx.send(f'{korean_stock_name} 주식을 찾을 수 없습니다.')
+                await ctx.send(f'Cannot find the stock {korean_stock_name}.')
                 return
             else:
                 info_stock = korean_stock_code
 
-        # 옵션에 따라 백테스트 및 결과 전송
+        # Backtest and send results depending on the option
         await backtest_and_send(ctx, info_stock, option_strategy='1')
         plot_results_mpl(info_stock, start_date, end_date)
     except Exception as e:  # Replace Exception with more specific exceptions if possible
@@ -193,13 +195,14 @@ async def stock(ctx, *args):
 async def show_all(ctx):
     try:
         await plot_results_all()
-        await ctx.send("모든 결과가 성공적으로 표시되었습니다.")
+        await ctx.send("All results have been successfully displayed.")
     except Exception as e:
-        await ctx.send(f"오류가 발생했습니다: {e}")
-        print(f"오류: {e}")
+        await ctx.send(f"An error occurred: {e}")
+        print(f"Error: {e}")
 
 bot.run(TOKEN)
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=int(os.getenv("PORT", 8080)))
+
 # .\\.venv\\Scripts\\activate
