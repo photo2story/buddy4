@@ -78,8 +78,9 @@ ACC_NO_8 = os.getenv('H_ACCOUNT_8')
 channel_id = os.getenv('DISCORD_CHANNEL_ID')
 
 stocks = [
-    'VOO', 'QQQ', 
-    'NVDA', 'AMD'
+    'QQQ', 'MSFT', 'AAPL', 'GOOGL', 'AMZN', 'TSLA', 'NVDA', 
+    'ADBE', 'JPM', 'F', 'BA', 'GE', 
+    'BAC', 'SQ', 'HD', 'PG', 'COIN', 'NFLX'
 ]
 
     # 'AAPL', 'GOOGL', 'MSFT', 'U', 'SPOT', 'PLTR', 'ADBE', 'TSLA', 'APTV', 'FSLR', 'PFE', 'INMD', 'UNH',
