@@ -1,15 +1,19 @@
-
 function addReview() {
-    const stockName = document.getElementById('stockName').value;
+    const stockName = document.getElementById('stockName').value.toUpperCase();
+    const reviewList = document.getElementById('reviewList');
+
     if (stockName) {
-        const reviewList = document.getElementById('reviewList');
         const newReview = document.createElement('div');
         newReview.className = 'review';
         newReview.innerHTML = `
             <h3>${stockName} vs VOO</h3>
-            <canvas id="${stockName.toLowerCase()}VsVooChart"></canvas>
+            <img src="https://raw.githubusercontent.com/photo2story/buddy4/main/comparison_${stockName}_VOO.png" alt="${stockName} vs VOO">
         `;
         reviewList.appendChild(newReview);
-        // Here you can add code to actually draw the chart using a chart library like Chart.js
+    } else {
+        alert('Please enter a stock name.');
     }
 }
+
+
+

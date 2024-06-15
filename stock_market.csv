@@ -2682,19 +2682,19 @@
 266870,파워풀엑스,KRX,기타 화학제품 제조업,,,
 107640,한중엔시에스,KRX,자동차 신품 부품 제조업,,,
 MSFT,Microsoft Corp,NASDAQ,Technology,MSFT,Software - Infrastructure,0.893
-AAPL,Apple Inc,NASDAQ,Technology,AAPL,Consumer Electronics,1.264
+AAPL,Apple Inc,NASDAQ,Technology,AAPL,Consumer Electronics,1.25
 NVDA,NVIDIA Corp,NASDAQ,Technology,NVDA,Semiconductors,1.694
-AMZN,Amazon.com Inc,NASDAQ,Consumer Cyclical,AMZN,Internet Retail,1.155
+AMZN,Amazon.com Inc,NASDAQ,Consumer Cyclical,AMZN,Internet Retail,1.142
 META,Meta Platforms Inc,NASDAQ,none,,,
-GOOGL,Alphabet Inc Class A,NASDAQ,Communication Services,GOOGL,Internet Content & Information,1.019
+GOOGL,Alphabet Inc Class A,NASDAQ,Communication Services,GOOGL,Internet Content & Information,1.01
 GOOG,Alphabet Inc Class C,NASDAQ,none,,,
 AVGO,Broadcom Inc,NASDAQ,none,,,
-TSLA,Tesla Inc,NASDAQ,Consumer Cyclical,TSLA,Auto Manufacturers,2.408
+TSLA,Tesla Inc,NASDAQ,Consumer Cyclical,TSLA,Auto Manufacturers,2.318
 ASML,ASML Holding NV ADR,NASDAQ,none,,,
 COST,Costco Wholesale Corp,NASDAQ,none,,,
 AMD,Advanced Micro Devices Inc,NASDAQ,Technology,AMD,Semiconductors,1.686
-NFLX,Netflix Inc,NASDAQ,Communication Services,NFLX,Entertainment,1.232
-ADBE,Adobe Inc,NASDAQ,Technology,ADBE,Software - Infrastructure,1.281
+NFLX,Netflix Inc,NASDAQ,Communication Services,NFLX,Entertainment,1.257
+ADBE,Adobe Inc,NASDAQ,Technology,ADBE,Software - Infrastructure,1.269
 PEP,PepsiCo Inc,NASDAQ,none,,,
 LIN,Linde PLC,NASDAQ,none,,,
 AZN,AstraZeneca PLC ADR,NASDAQ,none,,,
@@ -2749,7 +2749,7 @@ LULU,Lululemon Athletica Inc,NASDAQ,Consumer Cyclical,LULU,Apparel Retail,1.325
 ADSK,Autodesk Inc,NASDAQ,Technology,ADSK,Software - Application,1.454
 DASH,DoorDash Inc,NASDAQ,none,,,
 FTNT,Fortinet Inc,NASDAQ,none,,,
-COIN,Coinbase Global Inc,NASDAQ,none,,,
+COIN,Coinbase Global Inc,NASDAQ,Financial Services,COIN,Financial Data & Stock Exchanges,3.441
 CPRT,Copart Inc,NASDAQ,none,,,
 TEAM,Atlassian Corp,NASDAQ,none,,,
 ROST,Ross Stores Inc,NASDAQ,none,,,
@@ -6528,7 +6528,7 @@ IROHR,Iron Horse Acquisitions Rights Exp 27 December 2028,NASDAQ,none,,,
 LLY,Eli Lilly and Co,NYSE,Healthcare,LLY,Drug Manufacturers - General,0.371
 TSM,Taiwan Semiconductor Manufacturing Co Ltd ADR,NYSE,none,,,
 V,Visa Inc,NYSE,Financial Services,V,Credit Services,0.962
-JPM,JPMorgan Chase & Co,NYSE,Financial Services,JPM,Banks - Diversified,1.116
+JPM,JPMorgan Chase & Co,NYSE,Financial Services,JPM,Banks - Diversified,1.11
 BRK.B,Berkshire Hathaway Inc Class B,NYSE,none,,,
 WMT,Walmart Inc,NYSE,none,,,
 UNH,UnitedHealth Group Inc,NYSE,Healthcare,UNH,Healthcare Plans,0.561
@@ -6536,15 +6536,15 @@ MA,Mastercard Inc,NYSE,none,,,
 NVO,Novo Nordisk A/S ADR,NYSE,none,,,
 XOM,Exxon Mobil Corp,NYSE,Energy,XOM,Oil & Gas Integrated,0.947
 JNJ,Johnson & Johnson,NYSE,Healthcare,JNJ,Drug Manufacturers - General,0.531
-PG,Procter & Gamble Co,NYSE,Consumer Defensive,PG,Household & Personal Products,0.423
-HD,Home Depot Inc,NYSE,Consumer Cyclical,HD,Home Improvement Retail,1.011
+PG,Procter & Gamble Co,NYSE,Consumer Defensive,PG,Household & Personal Products,0.414
+HD,Home Depot Inc,NYSE,Consumer Cyclical,HD,Home Improvement Retail,1.0
 BRK.A,Berkshire Hathaway Inc Class A,NYSE,,BRK.A,,
 TM,Toyota Motor Corp ADR,NYSE,none,,,
 ABBV,AbbVie Inc,NYSE,none,,,
 MRK,Merck & Co Inc,NYSE,none,,,
 ORCL,Oracle Corp,NYSE,none,,,
 CRM,Salesforce Inc,NYSE,none,,,
-BAC,Bank of America Corp,NYSE,Financial Services,BAC,Banks - Diversified,1.375
+BAC,Bank of America Corp,NYSE,Financial Services,BAC,Banks - Diversified,1.364
 CVX,Chevron Corp,NYSE,Energy,CVX,Oil & Gas Integrated,1.118
 KO,Coca-Cola Co,NYSE,Consumer Defensive,KO,Beverages - Non-Alcoholic,0.591
 ACN,Accenture PLC,NYSE,none,,,
@@ -6559,7 +6559,7 @@ WFC,Wells Fargo & Co,NYSE,Financial Services,WFC,Banks - Diversified,1.196
 DHR,Danaher Corp,NYSE,none,,,
 BABA,Alibaba Group Holding Ltd ADR,NYSE,none,,,
 IBM,International Business Machines Corp,NYSE,none,,,
-GE,General Electric Co,NYSE,Industrials,GE,Aerospace & Defense,1.245
+GE,General Electric Co,NYSE,Industrials,GE,Aerospace & Defense,1.238
 VZ,Verizon Communications Inc,NYSE,none,,,
 CAT,Caterpillar Inc,NYSE,none,,,
 UBER,Uber Technologies Inc,NYSE,none,,,
@@ -6585,7 +6585,7 @@ GS,Goldman Sachs Group Inc,NYSE,none,,,
 MUFG,Mitsubishi UFJ Financial Group Inc ADR,NYSE,none,,,
 SCHW,Charles Schwab Corp,NYSE,none,,,
 T,AT&T Inc,NYSE,none,,,
-BA,Boeing Co,NYSE,Industrials,BA,Aerospace & Defense,1.542
+BA,Boeing Co,NYSE,Industrials,BA,Aerospace & Defense,1.555
 UL,Unilever PLC ADR,NYSE,none,,,
 PLD,Prologis Inc,NYSE,none,,,
 BLK,BlackRock Inc,NYSE,Financial Services,BLK,Asset Management,1.383
@@ -6703,7 +6703,7 @@ AIG,American International Group Inc,NYSE,none,,,
 E,Eni SpA ADR,NYSE,none,,,
 TRV,Travelers Companies Inc,NYSE,none,,,
 DHI,DR Horton Inc,NYSE,Consumer Cyclical,DHI,Residential Construction,1.638
-F,Ford Motor Co,NYSE,Consumer Cyclical,F,Auto Manufacturers,1.63
+F,Ford Motor Co,NYSE,Consumer Cyclical,F,Auto Manufacturers,1.625
 TFC,Truist Financial Corp,NYSE,none,,,
 PSA,Public Storage,NYSE,none,,,
 MFG,Mizuho Financial Group Inc ADR,NYSE,none,,,
@@ -6716,7 +6716,7 @@ COR,Cencora Inc,NYSE,none,,,
 GM,General Motors Co,NYSE,none,,,
 DLR,Digital Realty Trust Inc,NYSE,none,,,
 AFL,Aflac Inc,NYSE,none,,,
-SQ,Block Inc,NYSE,Technology,SQ,Software - Infrastructure,2.574
+SQ,Block Inc,NYSE,Technology,SQ,Software - Infrastructure,2.536
 URI,United Rentals Inc,NYSE,none,,,
 TAK,Takeda Pharmaceutical Co Ltd ADR,NYSE,none,,,
 CM,Canadian Imperial Bank of Commerce,NYSE,none,,,
