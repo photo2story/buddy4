@@ -1,6 +1,9 @@
 # main.py
+    # 'AAPL', 'GOOGL', 'MSFT', 'U', 'SPOT', 'PLTR', 'ADBE', 'TSLA', 'APTV', 'FSLR', 'PFE', 'INMD', 'UNH',
+    # 'TDOC', 'OXY', 'FSLR', 'ALB', 'AMZN', 'NFLX', 'LLY', 'EL', 'NKE', 'LOW', 'ADSK', 'NIO', 'F', 'BA', 'GE', 'JPM',
+    # 'BAC', 'SQ', 'HD', 'PG', 'IONQ', '086520', 
 
-from flask import Flask
+from flask import Flask, request, jsonify
 from threading import Thread
 import os
 from dotenv import load_dotenv
@@ -38,9 +41,11 @@ def execute_stock_command():
 
 async def execute_stock(stock_name):
     channel = bot.get_channel(int(CHANNEL_ID))
-    ctx = await bot.get_context(channel)
-    await stock(ctx, stock_name)
-
+    if channel:
+        ctx = await bot.get_context(channel)
+        await ctx.send(f'Processing stock: {stock_name}')
+        await stock(ctx, stock_name)
+        
 def run():
     app.run(host='0.0.0.0', port=int(os.getenv('PORT', 8080)))
 
@@ -82,10 +87,6 @@ stocks = [
     'ADBE', 'JPM', 'F', 'BA', 'GE', 'UNH', 'PFE',
     'BAC', 'SQ', 'HD', 'PG', 'COIN', 'NFLX'
 ]
-
-    # 'AAPL', 'GOOGL', 'MSFT', 'U', 'SPOT', 'PLTR', 'ADBE', 'TSLA', 'APTV', 'FSLR', 'PFE', 'INMD', 'UNH',
-    # 'TDOC', 'OXY', 'FSLR', 'ALB', 'AMZN', 'NFLX', 'LLY', 'EL', 'NKE', 'LOW', 'ADSK', 'NIO', 'F', 'BA', 'GE', 'JPM',
-    # 'BAC', 'SQ', 'HD', 'PG', 'IONQ', '086520', 
 
 start_date = "2022-01-01"
 end_date = datetime.today().strftime('%Y-%m-%d')
