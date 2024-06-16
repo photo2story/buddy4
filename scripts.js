@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
                     suggestionItem.textContent = `${item.Symbol} - ${item.Name} - ${item.Market} - ${item.Sector} - ${item.Industry}`;
                     suggestionItem.addEventListener('click', () => {
                         console.log('클릭된 항목:', suggestionItem.textContent);
-                        stockInput.value = "tesla Inc"; // 디버깅 목적으로 AAPL 직접 넣기
+                        stockInput.value = item.Symbol;  // 첫 번째 항목을 가져와서 입력란에 설정
                         console.log('입력 텍스트에 들어간 값:', stockInput.value);
                         suggestionsBox.innerHTML = '';
                         setTimeout(() => {
@@ -31,6 +31,11 @@ document.addEventListener('DOMContentLoaded', (event) => {
                 });
             })
             .catch(error => console.error('Error fetching tickers:', error)); // 에러 발생 시 콘솔에 출력
+    });
+
+    stockInput.addEventListener('change', () => {
+        const query = stockInput.value.toUpperCase();
+        console.log('변경된 입력 텍스트:', query);
     });
 
     stockInput.addEventListener('blur', () => {
@@ -115,4 +120,5 @@ function saveToSearchHistory(stockName) {
     })
     .catch(error => console.error('Error saving to search history:', error));
 }
+
 
