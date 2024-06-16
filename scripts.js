@@ -18,8 +18,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
                     suggestionItem.classList.add('autocomplete-suggestion');
                     suggestionItem.textContent = `${item.Symbol} - ${item.Name} - ${item.Market} - ${item.Sector} - ${item.Industry}`;
                     suggestionItem.addEventListener('click', () => {
-                        stockInput.value = item.Symbol;
+                        stockInput.value = item.Symbol;  // 입력란에 선택된 티커만 남기기
                         suggestionsBox.innerHTML = '';
+                        document.getElementById('searchReviewButton').click();  // 선택과 동시에 검색
                     });
                     suggestionsBox.appendChild(suggestionItem);
                 });
