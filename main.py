@@ -7,8 +7,19 @@ from flask import Flask, request, jsonify
 from threading import Thread
 import os
 from dotenv import load_dotenv
+import discord
+from discord.ext import commands
 import asyncio
 from datetime import datetime
+import pandas as pd
+import numpy as np
+import requests
+from discord.ext import tasks
+from get_ticker import load_tickers, search_tickers, get_ticker_name, update_stock_market_csv
+from estimate_stock import estimate_snp, estimate_stock
+from Results_plot import plot_comparison_results, plot_results_all
+from get_compare_stock_data import merge_csv_files, load_sector_info
+from Results_plot_mpl import plot_results_mpl
 import tracemalloc
 from flask_cors import CORS
 
@@ -26,14 +37,16 @@ def save_search_history():
     data = request.json
     stock_name = data.get('stock_name')
     if stock_name:
-        try:
-            log_entry = f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}: {stock_name}\n"
-            with open('search_history.log', 'a', encoding='utf-8') as log_file:
-                log_file.write(log_entry)
-            return jsonify(success=True)
-        except Exception as e:
-            return jsonify(success=False, error=str(e))
-    return jsonify(success=False, error="No stock name provided")
+        current_content = get_current_content()
+        new_entry = f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}: {stock_name}\n"
+        updated_content = current_content + new_entry
+        file_sha = get_file_sha()
+        if file_sha:
+            update_file(updated_content, file_sha)
+        else:
+            create_file(updated_content)
+        return jsonify(success=True)
+    return jsonify(success=False)
 
 def run():
     app.run(host='0.0.0.0', port=int(os.getenv('PORT', 8080)))
