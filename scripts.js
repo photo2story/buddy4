@@ -37,7 +37,7 @@ function showMplChart(stockName) {
 }
 
 function saveToSearchHistory(stockName) {
-    fetch('https://buddy4-19ltg8xt6-photo2storys-projects.vercel.app/api/save_search_history', {
+    fetch('https://buddy4-52yr84dki-photo2storys-projects.vercel.app/api/save_search_history', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -59,6 +59,7 @@ function saveToSearchHistory(stockName) {
     })
     .catch(error => console.error('Error saving to search history:', error));
 }
+
 
 
 

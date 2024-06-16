@@ -1,22 +1,17 @@
 {
     "version": 2,
-    "builds": [
+    "routes": [
       {
-        "src": "api/*.js",
-        "use": "@vercel/node"
-      },
-      {
-        "src": "*.html",
-        "use": "@vercel/static"
-      },
-      {
-        "src": "*.css",
-        "use": "@vercel/static"
-      },
-      {
-        "src": "*.js",
-        "use": "@vercel/static"
+        "src": "/api/save_search_history",
+        "methods": ["POST", "OPTIONS"],
+        "headers": {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "POST, OPTIONS",
+          "Access-Control-Allow-Headers": "Content-Type"
+        },
+        "dest": "/api/save_search_history.js"
       }
     ]
   }
+  
   

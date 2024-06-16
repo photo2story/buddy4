@@ -4,6 +4,15 @@ const fs = require('fs');
 const path = require('path');
 
 module.exports = (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+  if (req.method === 'OPTIONS') {
+    res.status(200).end();
+    return;
+  }
+
   if (req.method !== 'POST') {
     res.status(405).send({ message: 'Only POST requests are allowed' });
     return;
@@ -26,4 +35,5 @@ module.exports = (req, res) => {
     res.status(200).send({ success: true });
   });
 };
+
 
