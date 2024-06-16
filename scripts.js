@@ -31,14 +31,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
         setTimeout(() => { suggestionsBox.innerHTML = ''; }, 100);
     });
 
-    document.getElementById('stockName').addEventListener('keyup', function(event) {
-        if (event.key === 'Enter') {
-            document.getElementById('searchReviewButton').click();
-        }
-    });
-
     document.getElementById('searchReviewButton').addEventListener('click', () => {
-        const stockName = document.getElementById('stockName').value.toUpperCase();
+        const stockName = stockInput.value.toUpperCase();
         const reviewList = document.getElementById('reviewList');
         const reviewItems = reviewList.getElementsByClassName('review');
         let stockFound = false;

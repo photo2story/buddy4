@@ -16,6 +16,7 @@
     max-height: 200px;
     overflow-y: auto;
     width: 100%;
+    background-color: #fff; /* 배경색 설정 */
 }
 
 #stockName {
