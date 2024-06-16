@@ -27,12 +27,13 @@ input[type="text"] {
 }
 
 button {
-    padding: 10px 20px;
-    font-size: 1em;
+    padding: 10px;
     background-color: #333;
-    color: #fff;
+    color: white;
     border: none;
     cursor: pointer;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 button:hover {
@@ -40,15 +41,12 @@ button:hover {
 }
 
 .review {
-    background: #fff;
-    padding: 20px;
     margin: 20px 0;
-    border: 1px solid #ddd;
 }
 
-img {
+.review img {
     width: 100%;
-    height: auto;
+    cursor: pointer;
 }
 
 

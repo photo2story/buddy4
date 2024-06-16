@@ -15,7 +15,7 @@ function loadReviews() {
                     newReview.className = 'review';
                     newReview.innerHTML = `
                         <h3>${stockName} vs VOO</h3>
-                        <img src="${file.download_url}" alt="${stockName} vs VOO">
+                        <img src="${file.download_url}" alt="${stockName} vs VOO" style="width: 100%;" onclick="showMplChart('${stockName}')">
                     `;
                     reviewList.appendChild(newReview);
                 }
@@ -24,31 +24,36 @@ function loadReviews() {
         .catch(error => console.error('Error fetching the file list:', error));
 }
 
+function showMplChart(stockName) {
+    const url = `https://github.com/photo2story/buddy4/blob/main/result_mpl_${stockName}.png`;
+    window.open(url, '_blank');
+}
+
 function addReview() {
     const stockName = document.getElementById('stockName').value.toUpperCase();
     console.log(`Stock name entered: ${stockName}`); // 디버깅 메시지 추가
     if (stockName) {
-        fetch('http://localhost:8080/execute_stock_command', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ stock_name: stockName }),
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert(`Stock ${stockName} review is being processed.`);
-            } else {
-                alert(`Failed to add review for stock ${stockName}.`);
-            }
-        })
-        .catch(error => console.error('Error executing stock command:', error));
+        fetch('https://api.github.com/repos/photo2story/buddy4/contents/')
+            .then(response => response.json())
+            .then(data => {
+                const found = data.some(file => file.name.toUpperCase().includes(stockName));
+                if (found) {
+                    loadReviews();
+                } else {
+                    saveToSearchHistory(stockName);
+                    alert('Review is being prepared. Please check back later.');
+                }
+            })
+            .catch(error => console.error('Error fetching the file list:', error));
     } else {
         alert('Please enter a stock name.');
     }
 }
 
-document.getElementById('addReviewButton').addEventListener('click', addReview);
+function saveToSearchHistory(stockName) {
+    // 여기에 search history.log에 저장하는 코드를 추가하세요.
+    console.log(`Saving ${stockName} to search history.`);
+}
 
+document.getElementById('addReviewButton').addEventListener('click', addReview);
 
