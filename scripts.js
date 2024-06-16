@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
                     suggestionItem.textContent = `${item.Symbol} - ${item.Name} - ${item.Market} - ${item.Sector} - ${item.Industry}`;
                     suggestionItem.addEventListener('click', () => {
                         console.log('클릭된 항목:', suggestionItem.textContent);
-                        stockInput.value = "AAPL"; // 디버깅 목적으로 AAPL 직접 넣기
+                        stockInput.value = "tesla Inc"; // 디버깅 목적으로 AAPL 직접 넣기
                         console.log('입력 텍스트에 들어간 값:', stockInput.value);
                         suggestionsBox.innerHTML = '';
                         setTimeout(() => {
