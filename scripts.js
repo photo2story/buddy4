@@ -13,6 +13,7 @@ function loadReviews() {
                     const stockName = file.name.replace('comparison_', '').replace('_VOO.png', '').toUpperCase();
                     const newReview = document.createElement('div');
                     newReview.className = 'review';
+                    newReview.id = `review-${stockName}`;
                     newReview.innerHTML = `
                         <h3>${stockName} vs VOO</h3>
                         <img src="${file.download_url}" alt="${stockName} vs VOO" style="width: 100%;" onclick="showMplChart('${stockName}')">
@@ -49,6 +50,7 @@ function addReview() {
                 const found = data.some(file => file.name.toUpperCase().includes(stockName));
                 if (found) {
                     loadReviews();
+                    scrollToReview(stockName);
                 } else {
                     saveToSearchHistory(stockName);
                     alert('Review is being prepared. Please check back later.');
@@ -57,6 +59,15 @@ function addReview() {
             .catch(error => console.error('Error fetching the file list:', error));
     } else {
         alert('Please enter a stock name.');
+    }
+}
+
+function scrollToReview(stockName) {
+    const reviewElement = document.getElementById(`review-${stockName}`);
+    if (reviewElement) {
+        reviewElement.scrollIntoView({ behavior: 'smooth' });
+    } else {
+        console.log(`Review for ${stockName} not found.`);
     }
 }
 
