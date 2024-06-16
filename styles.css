@@ -23,31 +23,22 @@ input[type="text"] {
     padding: 10px;
     margin: 10px 0;
     width: 100%;
-    box-sizing: border-box;
+    text-transform: uppercase; /* 이 줄을 추가하여 입력 텍스트를 자동으로 대문자로 변환 */
 }
 
 button {
-    padding: 10px;
-    background-color: #333;
-    color: white;
-    border: none;
-    cursor: pointer;
-    width: 100%;
-    box-sizing: border-box;
-}
-
-button:hover {
-    background-color: #555;
+    padding: 10px 20px;
+    background: #333;
+    color: #fff;
+    border: 0;
 }
 
 .review {
-    margin: 20px 0;
+    margin-bottom: 20px;
 }
 
 .review img {
     width: 100%;
-    cursor: pointer;
 }
-
 
 
