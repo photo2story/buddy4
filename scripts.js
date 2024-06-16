@@ -1,119 +1,106 @@
 // scripts.js
 
-document.addEventListener('DOMContentLoaded', (event) => {
+$(function() {
     loadReviews();
 
-    const stockInput = document.getElementById('stockName');
-    const suggestionsBox = document.getElementById('autocomplete-list');
+    const stockInput = $('#stockName');
+    const suggestionsBox = $('#autocomplete-list');
 
-    stockInput.addEventListener('input', function() {
-        const query = this.value.toUpperCase();
-        console.log('입력 텍스트:', query);  // 입력된 텍스트 출력
-        fetch('http://localhost:8080/api/get_tickers')
-            .then(response => response.json())
-            .then(data => {
-                const suggestions = data.filter(item => item.Symbol.includes(query) || item.Name.toUpperCase().includes(query));
-                suggestionsBox.innerHTML = '';
-                suggestions.forEach((item, index) => {
-                    const suggestionItem = document.createElement('div');
-                    suggestionItem.classList.add('autocomplete-suggestion');
-                    suggestionItem.textContent = `${item.Symbol} - ${item.Name} - ${item.Market} - ${item.Sector} - ${item.Industry}`;
-                    suggestionItem.dataset.symbol = item.Symbol;  // 데이터를 dataset 속성에 저장
-                    suggestionItem.addEventListener('click', () => {
-                        console.log('클릭된 항목:', suggestionItem.textContent);  // 클릭된 항목 출력
-                        stockInput.value = suggestionItem.dataset.symbol;  // Symbol 값을 입력란에 설정
-                        console.log('입력 텍스트에 들어간 값:', stockInput.value);  // 입력란에 설정된 값 출력
-                        suggestionsBox.innerHTML = '';
-                        setTimeout(() => {
-                            document.getElementById('searchReviewButton').click();  // 선택과 동시에 검색
-                        }, 100);
+    stockInput.autocomplete({
+        source: function(request, response) {
+            $.ajax({
+                url: "http://localhost:8080/api/get_tickers",
+                method: "GET",
+                dataType: "json",
+                success: function(data) {
+                    var filteredData = $.map(data, function(item) {
+                        if (item.Symbol.toUpperCase().includes(request.term.toUpperCase()) ||
+                            item.Name.toUpperCase().includes(request.term.toUpperCase())) {
+                            return {
+                                label: item.Symbol + " - " + item.Name + " - " + item.Market + " - " + item.Sector + " - " + item.Industry,
+                                value: item.Symbol
+                            };
+                        } else {
+                            return null;
+                        }
                     });
-                    suggestionsBox.appendChild(suggestionItem);
-                });
-            })
-            .catch(error => console.error('Error fetching tickers:', error));  // 에러 발생 시 콘솔에 출력
+                    response(filteredData);
+                },
+                error: function() {
+                    console.error("Error fetching tickers");
+                }
+            });
+        },
+        select: function(event, ui) {
+            stockInput.val(ui.item.value);
+            $('#searchReviewButton').click();
+            return false;
+        }
     });
 
-    stockInput.addEventListener('blur', () => {
-        setTimeout(() => { suggestionsBox.innerHTML = ''; }, 100);
-    });
-
-    document.getElementById('searchReviewButton').addEventListener('click', () => {
-        const stockName = stockInput.value.toUpperCase();
-        console.log('검색 버튼 클릭 후 stockName:', stockName);  // 검색 버튼 클릭 후 stockName 출력
-        const reviewList = document.getElementById('reviewList');
-        const reviewItems = reviewList.getElementsByClassName('review');
+    $('#searchReviewButton').click(function() {
+        const stockName = stockInput.val().toUpperCase();
+        const reviewList = $('#reviewList');
+        const reviewItems = reviewList.find('.review');
         let stockFound = false;
 
-        for (let i = 0; i < reviewItems.length; i++) {
-            const reviewItem = reviewItems[i];
-            if (reviewItem.querySelector('h3').innerText.includes(stockName)) {
-                reviewItem.scrollIntoView({ behavior: 'smooth' });
+        reviewItems.each(function() {
+            const reviewItem = $(this);
+            if (reviewItem.find('h3').text().includes(stockName)) {
+                reviewItem[0].scrollIntoView({ behavior: 'smooth' });
                 stockFound = true;
-                break;
+                return false; // break the loop
             }
-        }
+        });
 
         if (!stockFound) {
             saveToSearchHistory(stockName);
             alert('Review is being prepared. Please try again later.');
         }
     });
-});
 
-function loadReviews() {
-    const reviewList = document.getElementById('reviewList');
+    function loadReviews() {
+        const reviewList = $('#reviewList');
 
-    fetch('https://api.github.com/repos/photo2story/buddy4/contents/')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            data.forEach(file => {
+        $.getJSON('https://api.github.com/repos/photo2story/buddy4/contents/', function(data) {
+            $.each(data, function(index, file) {
                 if (file.name.startsWith('comparison_') && file.name.endsWith('.png')) {
                     const stockName = file.name.replace('comparison_', '').replace('_VOO.png', '').toUpperCase();
-                    const newReview = document.createElement('div');
-                    newReview.className = 'review';
-                    newReview.innerHTML = `
+                    const newReview = $('<div>', { class: 'review' });
+                    newReview.html(`
                         <h3>${stockName} vs VOO</h3>
                         <img src="${file.download_url}" alt="${stockName} vs VOO" style="width: 100%;" onclick="showMplChart('${stockName}')">
-                    `;
-                    reviewList.appendChild(newReview);
+                    `);
+                    reviewList.append(newReview);
                 }
             });
-        })
-        .catch(error => console.error('Error fetching the file list:', error));
-}
+        }).fail(function() {
+            console.error('Error fetching the file list');
+        });
+    }
 
-function showMplChart(stockName) {
-    const url = `https://github.com/photo2story/buddy4/blob/main/result_mpl_${stockName}.png`;
-    window.open(url, '_blank');
-}
+    function showMplChart(stockName) {
+        const url = `https://github.com/photo2story/buddy4/blob/main/result_mpl_${stockName}.png`;
+        window.open(url, '_blank');
+    }
 
-function saveToSearchHistory(stockName) {
-    fetch('http://localhost:8080/save_search_history', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ stock_name: stockName }),
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-    })
-    .then(data => {
-        if (data.success) {
-            console.log(`Saved ${stockName} to search history.`);
-        } else {
-            console.error('Failed to save to search history.');
-        }
-    })
-    .catch(error => console.error('Error saving to search history:', error));
-}
+    function saveToSearchHistory(stockName) {
+        $.ajax({
+            url: 'http://localhost:8080/save_search_history',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({ stock_name: stockName }),
+            success: function(data) {
+                if (data.success) {
+                    console.log(`Saved ${stockName} to search history.`);
+                } else {
+                    console.error('Failed to save to search history.');
+                }
+            },
+            error: function() {
+                console.error('Error saving to search history');
+            }
+        });
+    }
+});
 
