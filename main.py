@@ -64,28 +64,14 @@ def save_search_history():
 
     return jsonify(success=True)
 
-# Data to XML conversion function
-def df_to_xml(df):
-    root = ET.Element('root')
-    for _, row in df.iterrows():
-        row_elem = ET.SubElement(root, 'row')
-        for field in df.columns:
-            field_elem = ET.SubElement(row_elem, field)
-            field_elem.text = str(row[field])
-    return ET.tostring(root, encoding='utf-8', method='xml').decode()
-
 @app.route('/api/get_tickers', methods=['GET'])
 def get_tickers():
-    df = pd.read_csv('stock_market.csv')
-    
-    # Fill NaN with appropriate data types
-    for column in df.select_dtypes(include=['float64']).columns:
-        df[column].fillna(0.0, inplace=True)  # NaN 값을 0.0으로 채움
-    for column in df.select_dtypes(include=['object']).columns:
-        df[column].fillna('', inplace=True)  # NaN 값을 빈 문자열로 채움
-    
-    xml_data = df_to_xml(df)
-    return Response(xml_data, mimetype='text/xml')
+    try:
+        stock_data = pd.read_csv('stock_market.csv')
+        tickers = stock_data[['Symbol', 'Name', 'Market', 'Sector', 'Industry']].dropna().to_dict(orient='records')
+        return jsonify(tickers)
+    except Exception as e:
+        return jsonify(error=str(e)), 500
 
 def run():
     app.run(host='0.0.0.0', port=int(os.getenv('PORT', 8080)))
