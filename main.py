@@ -77,7 +77,13 @@ def df_to_xml(df):
 @app.route('/api/get_tickers', methods=['GET'])
 def get_tickers():
     df = pd.read_csv('stock_market.csv')
-    df.fillna('', inplace=True)  # Fill NaN with empty strings
+    
+    # Fill NaN with appropriate data types
+    for column in df.select_dtypes(include=['float64']).columns:
+        df[column].fillna(0, inplace=True)
+    for column in df.select_dtypes(include=['object']).columns:
+        df[column].fillna('', inplace=True)
+    
     xml_data = df_to_xml(df)
     return Response(xml_data, mimetype='text/xml')
 
