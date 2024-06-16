@@ -42,6 +42,13 @@ $(function() {
         }
     });
 
+    stockInput.on('keypress', function(e) {
+        if (e.which === 13) { // Enter key
+            $('#searchReviewButton').click();
+            return false;
+        }
+    });
+
     $('#searchReviewButton').click(function() {
         const stockName = stockInput.val().toUpperCase();
         const reviewList = $('#reviewList');
