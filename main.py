@@ -63,6 +63,15 @@ def save_search_history():
 
     return jsonify(success=True)
 
+@app.route('/api/get_tickers', methods=['GET'])
+def get_tickers():
+    try:
+        stock_data = pd.read_csv('stock_market.csv')
+        tickers = stock_data['Symbol'].dropna().unique().tolist()
+        return jsonify(tickers)
+    except Exception as e:
+        return jsonify(error=str(e)), 500
+
 def run():
     app.run(host='0.0.0.0', port=int(os.getenv('PORT', 8080)))
 

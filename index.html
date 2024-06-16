@@ -4,21 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stock Comparison Review</title>
-    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* 스타일을 추가하여 자동 완성 목록의 모양을 설정할 수 있습니다 */
+        .autocomplete-suggestions {
+            border: 1px solid #ddd;
+            max-height: 200px;
+            overflow-y: auto;
+            position: absolute;
+            background-color: white;
+            width: 100%;
+        }
+        .autocomplete-suggestion {
+            padding: 10px;
+            cursor: pointer;
+        }
+        .autocomplete-suggestion:hover {
+            background-color: #f0f0f0;
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Stock Comparison Review</h1>
+    <div>
         <label for="stockName">Stock name:</label>
-        <input type="text" id="stockName" style="text-transform:uppercase;">
-        <button id="searchReviewButton">Search Review</button>
-
-        <h2>Review List</h2>
-        <div id="reviewList"></div>
+        <input type="text" id="stockName" name="stockName" autocomplete="off">
+        <div id="autocomplete-list" class="autocomplete-suggestions"></div>
     </div>
+    <button id="searchReviewButton">Search Review</button>
+    <div id="reviewList"></div>
+    
     <script src="scripts.js"></script>
 </body>
 </html>
+
 
 
 

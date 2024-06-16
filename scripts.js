@@ -1,12 +1,59 @@
 // scripts.js
 
-// scripts.js
-
 document.addEventListener('DOMContentLoaded', (event) => {
     loadReviews();
+
+    const stockInput = document.getElementById('stockName');
+    const suggestionsBox = document.getElementById('autocomplete-list');
+
+    stockInput.addEventListener('input', function() {
+        const query = this.value.toUpperCase();
+        fetch('http://localhost:8080/api/get_tickers')
+            .then(response => response.json())
+            .then(data => {
+                const suggestions = data.filter(ticker => ticker.includes(query));
+                suggestionsBox.innerHTML = '';
+                suggestions.forEach(ticker => {
+                    const suggestionItem = document.createElement('div');
+                    suggestionItem.classList.add('autocomplete-suggestion');
+                    suggestionItem.textContent = ticker;
+                    suggestionItem.addEventListener('click', () => {
+                        stockInput.value = ticker;
+                        suggestionsBox.innerHTML = '';
+                    });
+                    suggestionsBox.appendChild(suggestionItem);
+                });
+            });
+    });
+
+    stockInput.addEventListener('blur', () => {
+        setTimeout(() => { suggestionsBox.innerHTML = ''; }, 100);
+    });
+
     document.getElementById('stockName').addEventListener('keyup', function(event) {
         if (event.key === 'Enter') {
             document.getElementById('searchReviewButton').click();
+        }
+    });
+
+    document.getElementById('searchReviewButton').addEventListener('click', () => {
+        const stockName = document.getElementById('stockName').value.toUpperCase();
+        const reviewList = document.getElementById('reviewList');
+        const reviewItems = reviewList.getElementsByClassName('review');
+        let stockFound = false;
+
+        for (let i = 0; i < reviewItems.length; i++) {
+            const reviewItem = reviewItems[i];
+            if (reviewItem.querySelector('h3').innerText.includes(stockName)) {
+                reviewItem.scrollIntoView({ behavior: 'smooth' });
+                stockFound = true;
+                break;
+            }
+        }
+
+        if (!stockFound) {
+            saveToSearchHistory(stockName);
+            alert('Review is being prepared. Please try again later.');
         }
     });
 });
@@ -60,29 +107,7 @@ function saveToSearchHistory(stockName) {
         }
     })
     .catch(error => console.error('Error saving to search history:', error));
-  }
-  
-
-document.getElementById('searchReviewButton').addEventListener('click', () => {
-    const stockName = document.getElementById('stockName').value.toUpperCase();
-    const reviewList = document.getElementById('reviewList');
-    const reviewItems = reviewList.getElementsByClassName('review');
-    let stockFound = false;
-
-    for (let i = 0; i < reviewItems.length; i++) {
-        const reviewItem = reviewItems[i];
-        if (reviewItem.querySelector('h3').innerText.includes(stockName)) {
-            reviewItem.scrollIntoView({ behavior: 'smooth' });
-            stockFound = true;
-            break;
-        }
-    }
-
-    if (!stockFound) {
-        saveToSearchHistory(stockName);
-        alert('Review is being prepared. Please try again later.');
-    }
-});
+}
 
 
 
