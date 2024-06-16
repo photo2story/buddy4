@@ -20,7 +20,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
                     suggestionItem.addEventListener('click', () => {
                         stockInput.value = item.Symbol;  // 입력란에 선택된 티커만 남기기
                         suggestionsBox.innerHTML = '';
-                        document.getElementById('searchReviewButton').click();  // 선택과 동시에 검색
+                        setTimeout(() => {
+                            document.getElementById('searchReviewButton').click();  // 선택과 동시에 검색
+                        }, 100);
                     });
                     suggestionsBox.appendChild(suggestionItem);
                 });
@@ -57,7 +59,12 @@ function loadReviews() {
     const reviewList = document.getElementById('reviewList');
 
     fetch('https://api.github.com/repos/photo2story/buddy4/contents/')
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
         .then(data => {
             data.forEach(file => {
                 if (file.name.startsWith('comparison_') && file.name.endsWith('.png')) {
@@ -103,8 +110,3 @@ function saveToSearchHistory(stockName) {
     })
     .catch(error => console.error('Error saving to search history:', error));
 }
-
-
-
-
-
