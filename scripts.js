@@ -26,8 +26,9 @@ function loadReviews() {
 
 function addReview() {
     const stockName = document.getElementById('stockName').value.toUpperCase();
+    console.log(`Stock name entered: ${stockName}`); // 디버깅 메시지 추가
     if (stockName) {
-        fetch('/execute_stock_command', {
+        fetch('http://localhost:8080/execute_stock_command', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -49,4 +50,5 @@ function addReview() {
 }
 
 document.getElementById('addReviewButton').addEventListener('click', addReview);
+
 

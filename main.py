@@ -26,7 +26,7 @@ from flask_cors import CORS
 load_dotenv()
 
 app = Flask('')
-CORS(app)
+CORS(app) # Allow CORS for all domains
 
 @app.route('/')
 def home():
