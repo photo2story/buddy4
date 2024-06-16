@@ -2,6 +2,14 @@
 
 document.addEventListener('DOMContentLoaded', (event) => {
     loadReviews();
+
+    // 엔터 키 이벤트 처리기 추가
+    document.getElementById('stockName').addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            document.getElementById('addReviewButton').click();
+        }
+    });
 });
 
 function loadReviews() {
@@ -93,4 +101,5 @@ function saveToSearchHistory(stockName) {
 }
 
 document.getElementById('addReviewButton').addEventListener('click', addReview);
+
 
