@@ -7,8 +7,6 @@ from flask import Flask, request, jsonify
 from threading import Thread
 import os
 from dotenv import load_dotenv
-import discord
-from discord.ext import commands
 import asyncio
 from datetime import datetime
 import tracemalloc
@@ -19,39 +17,24 @@ load_dotenv()
 app = Flask('')
 CORS(app)
 
-SEARCH_HISTORY_FILE = 'search_history.log'
-
 @app.route('/')
 def home():
     return "I'm alive"
-
-@app.route('/execute_stock_command', methods=['POST'])
-def execute_stock_command():
-    data = request.json
-    stock_name = data.get('stock_name')
-    if stock_name:
-        asyncio.run(execute_stock(stock_name))
-        return jsonify(success=True)
-    return jsonify(success=False)
 
 @app.route('/save_search_history', methods=['POST'])
 def save_search_history():
     data = request.json
     stock_name = data.get('stock_name')
     if stock_name:
-        with open('search_history.log', 'a') as f:
-            f.write(f'{datetime.now()}: {stock_name}\n')
-        return jsonify(success=True)
-    return jsonify(success=False)
+        try:
+            log_entry = f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}: {stock_name}\n"
+            with open('search_history.log', 'a', encoding='utf-8') as log_file:
+                log_file.write(log_entry)
+            return jsonify(success=True)
+        except Exception as e:
+            return jsonify(success=False, error=str(e))
+    return jsonify(success=False, error="No stock name provided")
 
-
-async def execute_stock(stock_name):
-    channel = bot.get_channel(int(CHANNEL_ID))
-    if channel:
-        ctx = await bot.get_context(channel)
-        await ctx.send(f'Processing stock: {stock_name}')
-        await stock(ctx, stock_name)
-        
 def run():
     app.run(host='0.0.0.0', port=int(os.getenv('PORT', 8080)))
 
@@ -85,6 +68,8 @@ async def ping(ctx):
     await ctx.send(f'pong: {bot.user.name}')
 
 tracemalloc.start()
+
+channel_id = os.getenv('DISCORD_CHANNEL_ID')
 
 stocks = [
     'QQQ', 'MSFT', 'AAPL', 'GOOGL', 'AMZN', 'TSLA', 'NVDA', 

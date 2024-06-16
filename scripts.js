@@ -2,12 +2,9 @@
 
 document.addEventListener('DOMContentLoaded', (event) => {
     loadReviews();
-
-    // 엔터 키 이벤트 처리기 추가
-    document.getElementById('stockName').addEventListener('keydown', function(event) {
+    document.getElementById('stockName').addEventListener('keyup', function(event) {
         if (event.key === 'Enter') {
-            event.preventDefault();
-            document.getElementById('addReviewButton').click();
+            document.getElementById('searchReviewButton').click();
         }
     });
 });
@@ -23,7 +20,6 @@ function loadReviews() {
                     const stockName = file.name.replace('comparison_', '').replace('_VOO.png', '').toUpperCase();
                     const newReview = document.createElement('div');
                     newReview.className = 'review';
-                    newReview.id = `review-${stockName}`;
                     newReview.innerHTML = `
                         <h3>${stockName} vs VOO</h3>
                         <img src="${file.download_url}" alt="${stockName} vs VOO" style="width: 100%;" onclick="showMplChart('${stockName}')">
@@ -36,53 +32,12 @@ function loadReviews() {
 }
 
 function showMplChart(stockName) {
-    fetch('https://api.github.com/repos/photo2story/buddy4/contents/')
-        .then(response => response.json())
-        .then(data => {
-            const mplFile = data.find(file => file.name === `result_mpl_${stockName}.png`);
-            if (mplFile) {
-                const url = mplFile.download_url;
-                window.open(url, '_blank');
-            } else {
-                alert('MPL chart not found.');
-            }
-        })
-        .catch(error => console.error('Error fetching MPL chart:', error));
-}
-
-function addReview() {
-    const stockName = document.getElementById('stockName').value.toUpperCase();
-    console.log(`Stock name entered: ${stockName}`); // 디버깅 메시지 추가
-    if (stockName) {
-        fetch('https://api.github.com/repos/photo2story/buddy4/contents/')
-            .then(response => response.json())
-            .then(data => {
-                const found = data.some(file => file.name.toUpperCase().includes(stockName));
-                if (found) {
-                    loadReviews();
-                    scrollToReview(stockName);
-                } else {
-                    saveToSearchHistory(stockName);
-                    alert('Review is being prepared. Please check back later.');
-                }
-            })
-            .catch(error => console.error('Error fetching the file list:', error));
-    } else {
-        alert('Please enter a stock name.');
-    }
-}
-
-function scrollToReview(stockName) {
-    const reviewElement = document.getElementById(`review-${stockName}`);
-    if (reviewElement) {
-        reviewElement.scrollIntoView({ behavior: 'smooth' });
-    } else {
-        console.log(`Review for ${stockName} not found.`);
-    }
+    const url = `https://github.com/photo2story/buddy4/blob/main/result_mpl_${stockName}.png`;
+    window.open(url, '_blank');
 }
 
 function saveToSearchHistory(stockName) {
-    fetch('http://your_server_address/save_search_history', { // 이 부분을 서버 주소로 수정
+    fetch('/save_search_history', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -100,7 +55,26 @@ function saveToSearchHistory(stockName) {
     .catch(error => console.error('Error saving to search history:', error));
 }
 
-document.getElementById('addReviewButton').addEventListener('click', addReview);
+document.getElementById('searchReviewButton').addEventListener('click', () => {
+    const stockName = document.getElementById('stockName').value.toUpperCase();
+    const reviewList = document.getElementById('reviewList');
+    const reviewItems = reviewList.getElementsByClassName('review');
+    let stockFound = false;
+
+    for (let i = 0; i < reviewItems.length; i++) {
+        const reviewItem = reviewItems[i];
+        if (reviewItem.querySelector('h3').innerText.includes(stockName)) {
+            reviewItem.scrollIntoView({ behavior: 'smooth' });
+            stockFound = true;
+            break;
+        }
+    }
+
+    if (!stockFound) {
+        alert('Review is being prepared, please try again later.');
+        saveToSearchHistory(stockName);
+    }
+});
 
 
 
