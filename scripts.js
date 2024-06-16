@@ -44,7 +44,12 @@ function saveToSearchHistory(stockName) {
         },
         body: JSON.stringify({ stock_name: stockName }),
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
     .then(data => {
         if (data.success) {
             console.log(`Saved ${stockName} to search history.`);
@@ -54,7 +59,6 @@ function saveToSearchHistory(stockName) {
     })
     .catch(error => console.error('Error saving to search history:', error));
 }
-
 document.getElementById('searchReviewButton').addEventListener('click', () => {
     const stockName = document.getElementById('stockName').value.toUpperCase();
     const reviewList = document.getElementById('reviewList');
