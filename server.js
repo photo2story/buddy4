@@ -1,18 +1,15 @@
 const express = require('express');
+const bodyParser = require('body-parser');
 const fs = require('fs');
 const path = require('path');
-const bodyParser = require('body-parser');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = 8080;
 
-// Middleware
 app.use(bodyParser.json());
 
-// Routes
 app.post('/api/save_search_history', (req, res) => {
   const { stock_name } = req.body;
-
   if (!stock_name) {
     return res.status(400).json({ message: 'Stock name is required' });
   }
@@ -28,7 +25,7 @@ app.post('/api/save_search_history', (req, res) => {
   });
 });
 
-// Start server
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
+
