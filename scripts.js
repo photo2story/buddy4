@@ -11,14 +11,14 @@ document.addEventListener('DOMContentLoaded', (event) => {
         fetch('http://localhost:8080/api/get_tickers')
             .then(response => response.json())
             .then(data => {
-                const suggestions = data.filter(ticker => ticker.includes(query));
+                const suggestions = data.filter(item => item.Symbol.includes(query) || item.Name.toUpperCase().includes(query));
                 suggestionsBox.innerHTML = '';
-                suggestions.forEach(ticker => {
+                suggestions.forEach(item => {
                     const suggestionItem = document.createElement('div');
                     suggestionItem.classList.add('autocomplete-suggestion');
-                    suggestionItem.textContent = ticker;
+                    suggestionItem.textContent = `${item.Symbol} - ${item.Name} - ${item.Market} - ${item.Sector} - ${item.Industry}`;
                     suggestionItem.addEventListener('click', () => {
-                        stockInput.value = ticker;
+                        stockInput.value = item.Symbol;
                         suggestionsBox.innerHTML = '';
                     });
                     suggestionsBox.appendChild(suggestionItem);
@@ -108,6 +108,7 @@ function saveToSearchHistory(stockName) {
     })
     .catch(error => console.error('Error saving to search history:', error));
 }
+
 
 
 
