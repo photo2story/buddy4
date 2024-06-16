@@ -18,9 +18,11 @@ document.addEventListener('DOMContentLoaded', (event) => {
                     const suggestionItem = document.createElement('div');
                     suggestionItem.classList.add('autocomplete-suggestion');
                     suggestionItem.textContent = `${item.Symbol} - ${item.Name} - ${item.Market} - ${item.Sector} - ${item.Industry}`;
+                    suggestionItem.dataset.symbol = item.Symbol;  // data-symbol 속성에 Symbol 값 저장
                     suggestionItem.addEventListener('click', () => {
                         console.log('클릭된 항목:', suggestionItem.textContent);
-                        stockInput.value = item.Symbol;  // 첫 번째 항목을 가져와서 입력란에 설정
+                        console.log('선택된 Symbol:', suggestionItem.dataset.symbol);  // 선택된 Symbol 출력
+                        stockInput.value = suggestionItem.dataset.symbol;  // Symbol 값을 입력란에 설정
                         console.log('입력 텍스트에 들어간 값:', stockInput.value);
                         suggestionsBox.innerHTML = '';
                         setTimeout(() => {
