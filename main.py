@@ -3,7 +3,7 @@
     # 'TDOC', 'OXY', 'FSLR', 'ALB', 'AMZN', 'NFLX', 'LLY', 'EL', 'NKE', 'LOW', 'ADSK', 'NIO', 'F', 'BA', 'GE', 'JPM',
     # 'BAC', 'SQ', 'HD', 'PG', 'IONQ', '086520', 
 
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, Response
 from threading import Thread
 import os
 from dotenv import load_dotenv
@@ -64,21 +64,20 @@ def save_search_history():
 
     return jsonify(success=True)
 
-# CSV 파일 로드
-df = pd.read_csv('stock_market.csv')
-df = df.replace({np.nan: None})  # NaN 값을 None으로 대체
-
+# Data to XML conversion function
 def df_to_xml(df):
     root = ET.Element('root')
     for _, row in df.iterrows():
-        item = ET.SubElement(root, 'item')
+        row_elem = ET.SubElement(root, 'row')
         for field in df.columns:
-            field_element = ET.SubElement(item, field)
-            field_element.text = str(row[field])
-    return ET.tostring(root, encoding='utf-8')
+            field_elem = ET.SubElement(row_elem, field)
+            field_elem.text = str(row[field])
+    return ET.tostring(root, encoding='utf-8', method='xml').decode()
 
 @app.route('/api/get_tickers', methods=['GET'])
 def get_tickers():
+    df = pd.read_csv('stock_market.csv')
+    df.fillna('', inplace=True)  # Fill NaN with empty strings
     xml_data = df_to_xml(df)
     return Response(xml_data, mimetype='text/xml')
 
