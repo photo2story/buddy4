@@ -2,11 +2,40 @@
 
 document.addEventListener('DOMContentLoaded', (event) => {
     loadReviews();
-    document.getElementById('stockName').addEventListener('keyup', function(event) {
-        if (event.key === 'Enter') {
-            document.getElementById('searchReviewButton').click();
-        }
-    });
+
+    const stockNameInput = document.getElementById('stockName');
+    const searchReviewButton = document.getElementById('searchReviewButton');
+
+    if (stockNameInput && searchReviewButton) {
+        stockNameInput.addEventListener('keyup', function(event) {
+            if (event.key === 'Enter') {
+                searchReviewButton.click();
+            }
+        });
+
+        searchReviewButton.addEventListener('click', () => {
+            const stockName = stockNameInput.value.toUpperCase();
+            const reviewList = document.getElementById('reviewList');
+            const reviewItems = reviewList.getElementsByClassName('review');
+            let stockFound = false;
+
+            for (let i = 0; i < reviewItems.length; i++) {
+                const reviewItem = reviewItems[i];
+                if (reviewItem.querySelector('h3').innerText.includes(stockName)) {
+                    reviewItem.scrollIntoView({ behavior: 'smooth' });
+                    stockFound = true;
+                    break;
+                }
+            }
+
+            if (!stockFound) {
+                alert('Review is being prepared, please try again later.');
+                saveToSearchHistory(stockName);
+            }
+        });
+    } else {
+        console.error('Failed to find stockNameInput or searchReviewButton element.');
+    }
 });
 
 function loadReviews() {
@@ -54,27 +83,6 @@ function saveToSearchHistory(stockName) {
     })
     .catch(error => console.error('Error saving to search history:', error));
 }
-
-document.getElementById('searchReviewButton').addEventListener('click', () => {
-    const stockName = document.getElementById('stockName').value.toUpperCase();
-    const reviewList = document.getElementById('reviewList');
-    const reviewItems = reviewList.getElementsByClassName('review');
-    let stockFound = false;
-
-    for (let i = 0; i < reviewItems.length; i++) {
-        const reviewItem = reviewItems[i];
-        if (reviewItem.querySelector('h3').innerText.includes(stockName)) {
-            reviewItem.scrollIntoView({ behavior: 'smooth' });
-            stockFound = true;
-            break;
-        }
-    }
-
-    if (!stockFound) {
-        alert('Review is being prepared, please try again later.');
-        saveToSearchHistory(stockName);
-    }
-});
 
 
 

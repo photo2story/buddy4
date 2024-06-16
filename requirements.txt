@@ -22,3 +22,4 @@ yahoo_earnings_calendar
 yahoo_fin
 requests_html
 mplfinance
+flask_cors
