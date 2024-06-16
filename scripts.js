@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
                     suggestionsBox.appendChild(suggestionItem);
                 });
             })
-            .catch(error => console.error('Error fetching tickers:', error)); // 에러 발생 시 콘솔에 출력
+            .catch(error => console.error('Error fetching tickers:', error));// 에러 발생 시 콘솔에 출력
     });
 
     stockInput.addEventListener('blur', () => {
@@ -39,6 +39,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     document.getElementById('searchReviewButton').addEventListener('click', () => {
         const stockName = stockInput.value.toUpperCase();
+        console.log('검색 버튼 클릭 후 stockName:', stockName); // 검색 버튼 클릭 후 stockName 출력
         const reviewList = document.getElementById('reviewList');
         const reviewItems = reviewList.getElementsByClassName('review');
         let stockFound = false;
@@ -114,4 +115,3 @@ function saveToSearchHistory(stockName) {
     })
     .catch(error => console.error('Error saving to search history:', error));
 }
-
