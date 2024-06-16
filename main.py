@@ -66,12 +66,13 @@ def save_search_history():
 # Load stock market data
 data_path = 'stock_market.csv'
 stock_data = pd.read_csv(data_path)
+# Replace NaN values with None (null in JSON)
+stock_data = stock_data.replace({np.nan: None})
 
 @app.route('/api/get_tickers', methods=['GET'])
 def get_tickers():
     try:
-        stock_data = pd.read_csv('stock_market.csv')
-        tickers =  stock_data.to_dict(orient='records')
+        tickers = stock_data.to_dict(orient='records')
         return jsonify(tickers)
     except Exception as e:
         return jsonify(error=str(e)), 500
