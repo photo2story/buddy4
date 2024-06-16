@@ -80,9 +80,9 @@ def get_tickers():
     
     # Fill NaN with appropriate data types
     for column in df.select_dtypes(include=['float64']).columns:
-        df[column].fillna(0, inplace=True)
+        df[column].fillna(0.0, inplace=True)  # NaN 값을 0.0으로 채움
     for column in df.select_dtypes(include=['object']).columns:
-        df[column].fillna('', inplace=True)
+        df[column].fillna('', inplace=True)  # NaN 값을 빈 문자열로 채움
     
     xml_data = df_to_xml(df)
     return Response(xml_data, mimetype='text/xml')
