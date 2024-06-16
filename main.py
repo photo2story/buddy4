@@ -36,17 +36,16 @@ def home():
 def save_search_history():
     data = request.json
     stock_name = data.get('stock_name')
-    if stock_name:
-        current_content = get_current_content()
-        new_entry = f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}: {stock_name}\n"
-        updated_content = current_content + new_entry
-        file_sha = get_file_sha()
-        if file_sha:
-            update_file(updated_content, file_sha)
-        else:
-            create_file(updated_content)
+    if not stock_name:
+        return jsonify(success=False, error="No stock name provided"), 400
+
+    log_entry = f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}: {stock_name}\n"
+    try:
+        with open('search_history.log', 'a') as log_file:
+            log_file.write(log_entry)
         return jsonify(success=True)
-    return jsonify(success=False)
+    except Exception as e:
+        return jsonify(success=False, error=str(e)), 500
 
 def run():
     app.run(host='0.0.0.0', port=int(os.getenv('PORT', 8080)))

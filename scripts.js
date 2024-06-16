@@ -59,6 +59,7 @@ function saveToSearchHistory(stockName) {
     })
     .catch(error => console.error('Error saving to search history:', error));
 }
+
 document.getElementById('searchReviewButton').addEventListener('click', () => {
     const stockName = document.getElementById('stockName').value.toUpperCase();
     const reviewList = document.getElementById('reviewList');
