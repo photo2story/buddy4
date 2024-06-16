@@ -9,119 +9,97 @@ $(function() {
     stockInput.autocomplete({
         source: function(request, response) {
             $.ajax({
-                url: `http://localhost:8080/api/get_tickers`,
+                url: "http://localhost:8080/api/get_tickers",
                 method: "GET",
-                dataType: "xml",
+                dataType: "json",
                 success: function(data) {
-                    console.log("Fetched tickers data: ", data); // Fetch된 데이터 출력
-                    const items = $(data).find('item');
-                    const filteredData = $.map(items, function(item) {
-                        const symbol = $(item).find('Symbol').text();
-                        const name = $(item).find('Name').text();
-                        const market = $(item).find('Market').text();
-                        const sector = $(item).find('Sector').text();
-                        const industry = $(item).find('Industry').text();
-
-                        if (symbol.toUpperCase().includes(request.term.toUpperCase()) ||
-                            name.toUpperCase().includes(request.term.toUpperCase())) {
+                    var filteredData = $.map(data, function(item) {
+                        if (item.Symbol.toUpperCase().includes(request.term.toUpperCase()) ||
+                            item.Name.toUpperCase().includes(request.term.toUpperCase())) {
                             return {
-                                label: symbol + " - " + name + " - " + market + " - " + sector + " - " + industry,
-                                value: symbol
+                                label: item.Symbol + " - " + item.Name + " - " + item.Market + " - " + item.Sector + " - " + item.Industry,
+                                value: item.Symbol
                             };
+                        } else {
+                            return null;
                         }
-                        return null;
-                    }).filter(item => item !== null); // null 항목 제거
-                    console.log("Filtered data: ", filteredData); // 필터링된 데이터 출력
+                    });
                     response(filteredData);
                 },
-                error: function(xhr, status, error) {
-                    console.error("Error fetching tickers: ", error); // 에러 메시지 출력
+                error: function() {
+                    console.error("Error fetching tickers");
                 }
             });
         },
         select: function(event, ui) {
-            console.log('선택된 항목:', ui.item.value); // 선택된 항목 출력
-            stockInput.val(ui.item.value); // 선택된 값 입력란에 설정
-            setTimeout(() => {
-                $('#searchReviewButton').click(); // 선택과 동시에 검색
-            }, 100);
+            stockInput.val(ui.item.value);
+            $('#searchReviewButton').click();
+            return false;
         }
     });
-});
 
-function loadReviews() {
-    const reviewList = document.getElementById('reviewList');
+    $('#searchReviewButton').click(function() {
+        const stockName = stockInput.val().toUpperCase();
+        const reviewList = $('#reviewList');
+        const reviewItems = reviewList.find('.review');
+        let stockFound = false;
 
-    fetch('https://api.github.com/repos/photo2story/buddy4/contents/')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+        reviewItems.each(function() {
+            const reviewItem = $(this);
+            if (reviewItem.find('h3').text().includes(stockName)) {
+                reviewItem[0].scrollIntoView({ behavior: 'smooth' });
+                stockFound = true;
+                return false; // break the loop
             }
-            return response.json();
-        })
-        .then(data => {
-            data.forEach(file => {
+        });
+
+        if (!stockFound) {
+            saveToSearchHistory(stockName);
+            alert('Review is being prepared. Please try again later.');
+        }
+    });
+
+    function loadReviews() {
+        const reviewList = $('#reviewList');
+
+        $.getJSON('https://api.github.com/repos/photo2story/buddy4/contents/', function(data) {
+            $.each(data, function(index, file) {
                 if (file.name.startsWith('comparison_') && file.name.endsWith('.png')) {
                     const stockName = file.name.replace('comparison_', '').replace('_VOO.png', '').toUpperCase();
-                    const newReview = document.createElement('div');
-                    newReview.className = 'review';
-                    newReview.innerHTML = `
+                    const newReview = $('<div>', { class: 'review' });
+                    newReview.html(`
                         <h3>${stockName} vs VOO</h3>
                         <img src="${file.download_url}" alt="${stockName} vs VOO" style="width: 100%;" onclick="showMplChart('${stockName}')">
-                    `;
-                    reviewList.appendChild(newReview);
+                    `);
+                    reviewList.append(newReview);
                 }
             });
-        })
-        .catch(error => console.error('Error fetching the file list:', error));
-}
-
-function showMplChart(stockName) {
-    const url = `https://github.com/photo2story/buddy4/blob/main/result_mpl_${stockName}.png`;
-    window.open(url, '_blank');
-}
-
-function saveToSearchHistory(stockName) {
-    fetch('http://localhost:8080/save_search_history', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ stock_name: stockName }),
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-    })
-    .then(data => {
-        if (data.success) {
-            console.log(`Saved ${stockName} to search history.`);
-        } else {
-            console.error('Failed to save to search history.');
-        }
-    })
-    .catch(error => console.error('Error saving to search history:', error));
-}
-
-$('#searchReviewButton').on('click', () => {
-    const stockName = $('#stockName').val().toUpperCase();
-    const reviewList = $('#reviewList');
-    const reviewItems = reviewList.getElementsByClassName('review');
-    let stockFound = false;
-
-    for (let i = 0; i < reviewItems.length; i++) {
-        const reviewItem = reviewItems[i];
-        if (reviewItem.querySelector('h3').innerText.includes(stockName)) {
-            reviewItem.scrollIntoView({ behavior: 'smooth' });
-            stockFound = true;
-            break;
-        }
+        }).fail(function() {
+            console.error('Error fetching the file list');
+        });
     }
 
-    if (!stockFound) {
-        saveToSearchHistory(stockName);
-        alert('Review is being prepared. Please try again later.');
+    function showMplChart(stockName) {
+        const url = `https://github.com/photo2story/buddy4/blob/main/result_mpl_${stockName}.png`;
+        window.open(url, '_blank');
+    }
+
+    function saveToSearchHistory(stockName) {
+        $.ajax({
+            url: 'http://localhost:8080/save_search_history',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({ stock_name: stockName }),
+            success: function(data) {
+                if (data.success) {
+                    console.log(`Saved ${stockName} to search history.`);
+                } else {
+                    console.error('Failed to save to search history.');
+                }
+            },
+            error: function() {
+                console.error('Error saving to search history');
+            }
+        });
     }
 });
