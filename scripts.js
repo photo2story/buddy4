@@ -6,6 +6,10 @@ $(function() {
     const stockInput = $('#stockName');
     const suggestionsBox = $('#autocomplete-list');
 
+    stockInput.on('input', function() {
+        this.value = this.value.toUpperCase();
+    });
+
     stockInput.autocomplete({
         source: function(request, response) {
             $.ajax({
