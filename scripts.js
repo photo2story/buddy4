@@ -8,22 +8,21 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     stockInput.addEventListener('input', function() {
         const query = this.value.toUpperCase();
-        console.log('입력 텍스트:', query);
+        console.log('입력 텍스트:', query);  // 입력된 텍스트 출력
         fetch('http://localhost:8080/api/get_tickers')
             .then(response => response.json())
             .then(data => {
                 const suggestions = data.filter(item => item.Symbol.includes(query) || item.Name.toUpperCase().includes(query));
                 suggestionsBox.innerHTML = '';
-                suggestions.forEach(item => {
+                suggestions.forEach((item, index) => {
                     const suggestionItem = document.createElement('div');
                     suggestionItem.classList.add('autocomplete-suggestion');
                     suggestionItem.textContent = `${item.Symbol} - ${item.Name} - ${item.Market} - ${item.Sector} - ${item.Industry}`;
-                    suggestionItem.dataset.symbol = item.Symbol;  // data-symbol 속성에 Symbol 값 저장
+                    suggestionItem.dataset.symbol = item.Symbol;  // 데이터를 dataset 속성에 저장
                     suggestionItem.addEventListener('click', () => {
-                        console.log('클릭된 항목:', suggestionItem.textContent);
-                        console.log('선택된 Symbol:', suggestionItem.dataset.symbol);  // 선택된 Symbol 출력
+                        console.log('클릭된 항목:', suggestionItem.textContent);  // 클릭된 항목 출력
                         stockInput.value = suggestionItem.dataset.symbol;  // Symbol 값을 입력란에 설정
-                        console.log('입력 텍스트에 들어간 값:', stockInput.value);
+                        console.log('입력 텍스트에 들어간 값:', stockInput.value);  // 입력란에 설정된 값 출력
                         suggestionsBox.innerHTML = '';
                         setTimeout(() => {
                             document.getElementById('searchReviewButton').click();  // 선택과 동시에 검색
@@ -32,12 +31,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
                     suggestionsBox.appendChild(suggestionItem);
                 });
             })
-            .catch(error => console.error('Error fetching tickers:', error)); // 에러 발생 시 콘솔에 출력
-    });
-
-    stockInput.addEventListener('change', () => {
-        const query = stockInput.value.toUpperCase();
-        console.log('변경된 입력 텍스트:', query);
+            .catch(error => console.error('Error fetching tickers:', error));  // 에러 발생 시 콘솔에 출력
     });
 
     stockInput.addEventListener('blur', () => {
@@ -46,7 +40,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     document.getElementById('searchReviewButton').addEventListener('click', () => {
         const stockName = stockInput.value.toUpperCase();
-        console.log('검색 버튼 클릭 후 stockName:', stockName);
+        console.log('검색 버튼 클릭 후 stockName:', stockName);  // 검색 버튼 클릭 후 stockName 출력
         const reviewList = document.getElementById('reviewList');
         const reviewItems = reviewList.getElementsByClassName('review');
         let stockFound = false;
@@ -122,5 +116,4 @@ function saveToSearchHistory(stockName) {
     })
     .catch(error => console.error('Error saving to search history:', error));
 }
-
 
