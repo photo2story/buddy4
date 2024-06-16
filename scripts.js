@@ -25,8 +25,18 @@ function loadReviews() {
 }
 
 function showMplChart(stockName) {
-    const url = `https://github.com/photo2story/buddy4/blob/main/result_mpl_${stockName}.png`;
-    window.open(url, '_blank');
+    fetch('https://api.github.com/repos/photo2story/buddy4/contents/')
+        .then(response => response.json())
+        .then(data => {
+            const mplFile = data.find(file => file.name === `result_mpl_${stockName}.png`);
+            if (mplFile) {
+                const url = mplFile.download_url;
+                window.open(url, '_blank');
+            } else {
+                alert('MPL chart not found.');
+            }
+        })
+        .catch(error => console.error('Error fetching MPL chart:', error));
 }
 
 function addReview() {
