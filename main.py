@@ -39,10 +39,11 @@ def save_search_history():
     data = request.json
     stock_name = data.get('stock_name')
     if stock_name:
-        with open(SEARCH_HISTORY_FILE, 'a') as f:
+        with open('search_history.log', 'a') as f:
             f.write(f'{datetime.now()}: {stock_name}\n')
         return jsonify(success=True)
     return jsonify(success=False)
+
 
 async def execute_stock(stock_name):
     channel = bot.get_channel(int(CHANNEL_ID))

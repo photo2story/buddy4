@@ -82,7 +82,7 @@ function scrollToReview(stockName) {
 }
 
 function saveToSearchHistory(stockName) {
-    fetch('/save_search_history', {
+    fetch('http://your_server_address/save_search_history', { // 이 부분을 서버 주소로 수정
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -101,5 +101,6 @@ function saveToSearchHistory(stockName) {
 }
 
 document.getElementById('addReviewButton').addEventListener('click', addReview);
+
 
 
