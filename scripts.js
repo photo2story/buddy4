@@ -1,6 +1,8 @@
 // scripts.js
 
 $(function() {
+    let currentPage = 1; // 현재 페이지 초기화
+    const perPage = 100; // 페이지당 항목 수 설정
     loadReviews();
 
     const stockInput = $('#stockName');
@@ -9,13 +11,13 @@ $(function() {
     stockInput.autocomplete({
         source: function(request, response) {
             $.ajax({
-                url: "http://localhost:8080/api/get_tickers",
+                url: `http://localhost:8080/api/get_tickers?page=${currentPage}&per_page=${perPage}`,
                 method: "GET",
                 dataType: "json",
                 success: function(data) {
                     console.log("Fetched tickers data: ", data); // Fetch된 데이터 출력
                     var filteredData = $.map(data, function(item) {
-                        if (item.Symbol && item.Name && item.Market && item.Sector && item.Industry) {
+                        if (item.Symbol && item.Name) {
                             if (item.Symbol.toUpperCase().includes(request.term.toUpperCase()) ||
                                 item.Name.toUpperCase().includes(request.term.toUpperCase())) {
                                 return {
@@ -28,6 +30,10 @@ $(function() {
                     }).filter(item => item !== null); // null 항목 제거
                     console.log("Filtered data: ", filteredData); // 필터링된 데이터 출력
                     response(filteredData);
+
+                    if (filteredData.length < perPage) {
+                        currentPage++; // 페이지 증가
+                    }
                 },
                 error: function(xhr, status, error) {
                     console.error("Error fetching tickers: ", error); // 에러 메시지 출력
@@ -100,25 +106,23 @@ function saveToSearchHistory(stockName) {
     .catch(error => console.error('Error saving to search history:', error));
 }
 
-document.getElementById('searchReviewButton').addEventListener('click', () => {
+$('#searchReviewButton').on('click', () => {
     const stockName = $('#stockName').val().toUpperCase();
-    const reviewList = document.getElementById('reviewList');
-    const reviewItems = reviewList.getElementsByClassName('review');
+    const reviewList = $('#reviewList');
+    const reviewItems = reviewList.find('.review');
     let stockFound = false;
 
-    for (let i = 0; i < reviewItems.length; i++) {
-        const reviewItem = reviewItems[i];
-        if (reviewItem.querySelector('h3').innerText.includes(stockName)) {
-            reviewItem.scrollIntoView({ behavior: 'smooth' });
+    reviewItems.each(function() {
+        const reviewItem = $(this);
+        if (reviewItem.find('h3').text().includes(stockName)) {
+            reviewItem[0].scrollIntoView({ behavior: 'smooth' });
             stockFound = true;
-            break;
+            return false; // break out of each loop
         }
-    }
+    });
 
     if (!stockFound) {
         saveToSearchHistory(stockName);
         alert('Review is being prepared. Please try again later.');
     }
 });
-
-

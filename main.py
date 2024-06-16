@@ -63,20 +63,23 @@ def save_search_history():
 
     return jsonify(success=True)
 
-# Load stock market data
-data_path = 'stock_market.csv'
-stock_data = pd.read_csv(data_path)
-# Replace NaN values with None (null in JSON)
-stock_data = stock_data.replace({np.nan: None})
+# CSV 파일 로드
+df = pd.read_csv('stock_market.csv')
+df = df.replace({np.nan: None})  # NaN 값을 None으로 대체
 
 @app.route('/api/get_tickers', methods=['GET'])
 def get_tickers():
     try:
-        tickers = stock_data.to_dict(orient='records')
+        page = int(request.args.get('page', 1))
+        per_page = int(request.args.get('per_page', 100))
+        start = (page - 1) * per_page
+        end = start + per_page
+
+        # 선택된 범위의 데이터를 JSON으로 변환
+        tickers = df.iloc[start:end].to_dict(orient='records')
         return jsonify(tickers)
     except Exception as e:
         return jsonify(error=str(e)), 500
-
 
 def run():
     app.run(host='0.0.0.0', port=int(os.getenv('PORT', 8080)))
