@@ -40,12 +40,28 @@ def save_search_history():
         return jsonify(success=False, error="No stock name provided"), 400
 
     log_entry = f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}: {stock_name}\n"
+
+    # 로컬 파일에 로그 저장
     try:
         with open('search_history.log', 'a') as log_file:
             log_file.write(log_entry)
-        return jsonify(success=True)
     except Exception as e:
         return jsonify(success=False, error=str(e)), 500
+
+    # Discord 웹훅에 로그 전송
+    webhook_url = os.getenv('DISCORD_WEBHOOK_URL')
+    if webhook_url:
+        payload = {
+            "content": log_entry
+        }
+        try:
+            response = requests.post(webhook_url, json=payload)
+            if response.status_code != 204:
+                return jsonify(success=False, error="Failed to send to Discord"), 500
+        except Exception as e:
+            return jsonify(success=False, error=str(e)), 500
+
+    return jsonify(success=True)
 
 def run():
     app.run(host='0.0.0.0', port=int(os.getenv('PORT', 8080)))
