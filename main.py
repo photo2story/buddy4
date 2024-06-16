@@ -22,6 +22,7 @@ from get_compare_stock_data import merge_csv_files, load_sector_info
 from Results_plot_mpl import plot_results_mpl
 import tracemalloc
 from flask_cors import CORS
+import xml.etree.ElementTree as ET
 
 load_dotenv()
 
