@@ -20,11 +20,11 @@ document.addEventListener('DOMContentLoaded', (event) => {
                     suggestionItem.textContent = `${item.Symbol} - ${item.Name} - ${item.Market} - ${item.Sector} - ${item.Industry}`;
                     suggestionItem.addEventListener('click', () => {
                         console.log('클릭된 항목:', suggestionItem.textContent);
-                        stockInput.value = item.Symbol; // 클릭된 항목의 첫 번째 단어를 가져옴
+                        stockInput.value = "AAPL"; // 디버깅 목적으로 AAPL 직접 넣기
                         console.log('입력 텍스트에 들어간 값:', stockInput.value);
                         suggestionsBox.innerHTML = '';
                         setTimeout(() => {
-                            document.getElementById('searchReviewButton').click(); // 선택과 동시에 검색
+                            document.getElementById('searchReviewButton').click();  // 선택과 동시에 검색
                         }, 100);
                     });
                     suggestionsBox.appendChild(suggestionItem);
@@ -115,3 +115,4 @@ function saveToSearchHistory(stockName) {
     })
     .catch(error => console.error('Error saving to search history:', error));
 }
+
