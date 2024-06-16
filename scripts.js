@@ -11,21 +11,23 @@ document.addEventListener('DOMContentLoaded', (event) => {
         fetch('http://localhost:8080/api/get_tickers')
             .then(response => response.json())
             .then(data => {
-                const suggestions = data.filter(item => item.Name.toUpperCase() === query);
+                const suggestions = data.filter(item => item.Symbol.includes(query) || item.Name.toUpperCase().includes(query));
                 suggestionsBox.innerHTML = '';
                 suggestions.forEach(item => {
                     const suggestionItem = document.createElement('div');
                     suggestionItem.classList.add('autocomplete-suggestion');
                     suggestionItem.textContent = `${item.Symbol} - ${item.Name} - ${item.Market} - ${item.Sector} - ${item.Industry}`;
                     suggestionItem.addEventListener('click', () => {
+                        suggestionsBox.innerHTML = '';// 선택 후 제안 목록 지우기
                         stockInput.value = item.Symbol;  // 입력란에 선택된 티커만 남기기
-                        suggestionsBox.innerHTML = '';
-                        document.getElementById('searchReviewButton').click();  // 선택과 동시에 검색
+                        setTimeout(() => {
+                            document.getElementById('searchReviewButton').click();  // 선택과 동시에 검색
+                        }, 100);
                     });
                     suggestionsBox.appendChild(suggestionItem);
                 });
             })
-            .catch(error => console.error('Error fetching the tickers:', error));
+            .catch(error => console.error('Error fetching tickers:', error));// 에러 발생 시 콘솔에 출력
     });
 
     stockInput.addEventListener('blur', () => {
