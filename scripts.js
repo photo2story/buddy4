@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     stockInput.addEventListener('input', function() {
         const query = this.value.toUpperCase();
+        console.log('입력 텍스트:', query); // 입력 텍스트 출력
         fetch('http://localhost:8080/api/get_tickers')
             .then(response => response.json())
             .then(data => {
@@ -18,8 +19,10 @@ document.addEventListener('DOMContentLoaded', (event) => {
                     suggestionItem.classList.add('autocomplete-suggestion');
                     suggestionItem.textContent = `${item.Symbol} - ${item.Name} - ${item.Market} - ${item.Sector} - ${item.Industry}`;
                     suggestionItem.addEventListener('click', () => {
-                        suggestionsBox.innerHTML = '';// 선택 후 제안 목록 지우기
+                        console.log('선택된 suggestionItem:', suggestionItem.textContent); // 선택된 제안 항목 출력
                         stockInput.value = suggestionItem.textContent.split(' ')[0];  // 첫번째 항목을 가져와서 입력란에 설정
+                        console.log('입력 텍스트에 들어간 문자:', stockInput.value); // 입력 텍스트에 들어간 문자 출력
+                        suggestionsBox.innerHTML = ''; // 선택 후 제안 목록 지우기
                         setTimeout(() => {
                             document.getElementById('searchReviewButton').click();  // 선택과 동시에 검색
                         }, 100);
@@ -27,7 +30,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
                     suggestionsBox.appendChild(suggestionItem);
                 });
             })
-            .catch(error => console.error('Error fetching tickers:', error));// 에러 발생 시 콘솔에 출력
+            .catch(error => console.error('Error fetching tickers:', error)); // 에러 발생 시 콘솔에 출력
     });
 
     stockInput.addEventListener('blur', () => {
@@ -111,3 +114,4 @@ function saveToSearchHistory(stockName) {
     })
     .catch(error => console.error('Error saving to search history:', error));
 }
+
