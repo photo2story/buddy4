@@ -1,3 +1,5 @@
+// scripts.js
+
 document.addEventListener('DOMContentLoaded', (event) => {
     loadReviews();
 });
@@ -72,8 +74,22 @@ function scrollToReview(stockName) {
 }
 
 function saveToSearchHistory(stockName) {
-    // 여기에 search history.log에 저장하는 코드를 추가하세요.
-    console.log(`Saving ${stockName} to search history.`);
+    fetch('/save_search_history', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ stock_name: stockName }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            console.log(`Saved ${stockName} to search history.`);
+        } else {
+            console.error('Failed to save to search history.');
+        }
+    })
+    .catch(error => console.error('Error saving to search history:', error));
 }
 
 document.getElementById('addReviewButton').addEventListener('click', addReview);

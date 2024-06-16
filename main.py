@@ -11,22 +11,15 @@ import discord
 from discord.ext import commands
 import asyncio
 from datetime import datetime
-import pandas as pd
-import numpy as np
-import requests
-from discord.ext import tasks
-from get_ticker import load_tickers, search_tickers, get_ticker_name,update_stock_market_csv
-from estimate_stock import estimate_snp, estimate_stock
-from Results_plot import plot_comparison_results, plot_results_all
-from get_compare_stock_data import merge_csv_files, load_sector_info
-from Results_plot_mpl import plot_results_mpl
 import tracemalloc
 from flask_cors import CORS
 
 load_dotenv()
 
 app = Flask('')
-CORS(app) # Allow CORS for all domains
+CORS(app)
+
+SEARCH_HISTORY_FILE = 'search_history.log'
 
 @app.route('/')
 def home():
@@ -38,6 +31,16 @@ def execute_stock_command():
     stock_name = data.get('stock_name')
     if stock_name:
         asyncio.run(execute_stock(stock_name))
+        return jsonify(success=True)
+    return jsonify(success=False)
+
+@app.route('/save_search_history', methods=['POST'])
+def save_search_history():
+    data = request.json
+    stock_name = data.get('stock_name')
+    if stock_name:
+        with open(SEARCH_HISTORY_FILE, 'a') as f:
+            f.write(f'{datetime.now()}: {stock_name}\n')
         return jsonify(success=True)
     return jsonify(success=False)
 
@@ -81,8 +84,6 @@ async def ping(ctx):
     await ctx.send(f'pong: {bot.user.name}')
 
 tracemalloc.start()
-
-channel_id = os.getenv('DISCORD_CHANNEL_ID')
 
 stocks = [
     'QQQ', 'MSFT', 'AAPL', 'GOOGL', 'AMZN', 'TSLA', 'NVDA', 
