@@ -1,5 +1,7 @@
 // scripts.js
 
+// scripts.js
+
 document.addEventListener('DOMContentLoaded', (event) => {
     loadReviews();
     document.getElementById('stockName').addEventListener('keyup', function(event) {
@@ -37,7 +39,7 @@ function showMplChart(stockName) {
 }
 
 function saveToSearchHistory(stockName) {
-    fetch('http://localhost:3000/api/save_search_history', {
+    fetch('http://localhost:8080/api/save_search_history', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -59,8 +61,6 @@ function saveToSearchHistory(stockName) {
     })
     .catch(error => console.error('Error saving to search history:', error));
 }
-
-
 
 document.getElementById('searchReviewButton').addEventListener('click', () => {
     const stockName = document.getElementById('stockName').value.toUpperCase();
