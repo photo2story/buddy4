@@ -66,7 +66,5 @@ def main():
 if __name__ == "__main__":
     main()
 
-    save_search_history_to_github("LLY")
-
 # .\\.venv\\Scripts\\activate
 # python save_to_github.py
