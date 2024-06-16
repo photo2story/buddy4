@@ -67,19 +67,19 @@ def save_search_history():
 df = pd.read_csv('stock_market.csv')
 df = df.replace({np.nan: None})  # NaN 값을 None으로 대체
 
+def df_to_xml(df):
+    root = ET.Element('root')
+    for _, row in df.iterrows():
+        item = ET.SubElement(root, 'item')
+        for field in df.columns:
+            field_element = ET.SubElement(item, field)
+            field_element.text = str(row[field])
+    return ET.tostring(root, encoding='utf-8')
+
 @app.route('/api/get_tickers', methods=['GET'])
 def get_tickers():
-    try:
-        page = int(request.args.get('page', 1))
-        per_page = int(request.args.get('per_page', 100))
-        start = (page - 1) * per_page
-        end = start + per_page
-
-        # 선택된 범위의 데이터를 JSON으로 변환
-        tickers = df.iloc[start:end].to_dict(orient='records')
-        return jsonify(tickers)
-    except Exception as e:
-        return jsonify(error=str(e)), 500
+    xml_data = df_to_xml(df)
+    return Response(xml_data, mimetype='text/xml')
 
 def run():
     app.run(host='0.0.0.0', port=int(os.getenv('PORT', 8080)))

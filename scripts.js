@@ -1,8 +1,6 @@
 // scripts.js
 
 $(function() {
-    let currentPage = 1; // 현재 페이지 초기화
-    const perPage = 100; // 페이지당 항목 수 설정
     loadReviews();
 
     const stockInput = $('#stockName');
@@ -11,29 +9,30 @@ $(function() {
     stockInput.autocomplete({
         source: function(request, response) {
             $.ajax({
-                url: `http://localhost:8080/api/get_tickers?page=${currentPage}&per_page=${perPage}`,
+                url: `http://localhost:8080/api/get_tickers`,
                 method: "GET",
-                dataType: "json",
+                dataType: "xml",
                 success: function(data) {
                     console.log("Fetched tickers data: ", data); // Fetch된 데이터 출력
-                    var filteredData = $.map(data, function(item) {
-                        if (item.Symbol && item.Name) {
-                            if (item.Symbol.toUpperCase().includes(request.term.toUpperCase()) ||
-                                item.Name.toUpperCase().includes(request.term.toUpperCase())) {
-                                return {
-                                    label: item.Symbol + " - " + item.Name + " - " + item.Market + " - " + item.Sector + " - " + item.Industry,
-                                    value: item.Symbol
-                                };
-                            }
+                    const items = $(data).find('item');
+                    const filteredData = $.map(items, function(item) {
+                        const symbol = $(item).find('Symbol').text();
+                        const name = $(item).find('Name').text();
+                        const market = $(item).find('Market').text();
+                        const sector = $(item).find('Sector').text();
+                        const industry = $(item).find('Industry').text();
+
+                        if (symbol.toUpperCase().includes(request.term.toUpperCase()) ||
+                            name.toUpperCase().includes(request.term.toUpperCase())) {
+                            return {
+                                label: symbol + " - " + name + " - " + market + " - " + sector + " - " + industry,
+                                value: symbol
+                            };
                         }
                         return null;
                     }).filter(item => item !== null); // null 항목 제거
                     console.log("Filtered data: ", filteredData); // 필터링된 데이터 출력
                     response(filteredData);
-
-                    if (filteredData.length < perPage) {
-                        currentPage++; // 페이지 증가
-                    }
                 },
                 error: function(xhr, status, error) {
                     console.error("Error fetching tickers: ", error); // 에러 메시지 출력
@@ -109,17 +108,17 @@ function saveToSearchHistory(stockName) {
 $('#searchReviewButton').on('click', () => {
     const stockName = $('#stockName').val().toUpperCase();
     const reviewList = $('#reviewList');
-    const reviewItems = reviewList.find('.review');
+    const reviewItems = reviewList.getElementsByClassName('review');
     let stockFound = false;
 
-    reviewItems.each(function() {
-        const reviewItem = $(this);
-        if (reviewItem.find('h3').text().includes(stockName)) {
-            reviewItem[0].scrollIntoView({ behavior: 'smooth' });
+    for (let i = 0; i < reviewItems.length; i++) {
+        const reviewItem = reviewItems[i];
+        if (reviewItem.querySelector('h3').innerText.includes(stockName)) {
+            reviewItem.scrollIntoView({ behavior: 'smooth' });
             stockFound = true;
-            return false; // break out of each loop
+            break;
         }
-    });
+    }
 
     if (!stockFound) {
         saveToSearchHistory(stockName);
