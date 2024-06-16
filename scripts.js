@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
                     suggestionItem.textContent = `${item.Symbol} - ${item.Name} - ${item.Market} - ${item.Sector} - ${item.Industry}`;
                     suggestionItem.addEventListener('click', () => {
                         suggestionsBox.innerHTML = '';// 선택 후 제안 목록 지우기
-                        stockInput.value = item.Symbol;  // 입력란에 선택된 티커만 남기기
+                        stockInput.value = suggestionItem.textContent.split(' ')[0];  // 첫번째 항목을 가져와서 입력란에 설정
                         setTimeout(() => {
                             document.getElementById('searchReviewButton').click();  // 선택과 동시에 검색
                         }, 100);
