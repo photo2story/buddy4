@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         fetch('http://localhost:8080/api/get_tickers')
             .then(response => response.json())
             .then(data => {
-                const suggestions = data.filter(item => item.Symbol.includes(query) || item.Name.toUpperCase().includes(query));
+                const suggestions = data.filter(item => item.Name.toUpperCase() === query);
                 suggestionsBox.innerHTML = '';
                 suggestions.forEach(item => {
                     const suggestionItem = document.createElement('div');
@@ -20,13 +20,12 @@ document.addEventListener('DOMContentLoaded', (event) => {
                     suggestionItem.addEventListener('click', () => {
                         stockInput.value = item.Symbol;  // 입력란에 선택된 티커만 남기기
                         suggestionsBox.innerHTML = '';
-                        setTimeout(() => {
-                            document.getElementById('searchReviewButton').click();  // 선택과 동시에 검색
-                        }, 100);
+                        document.getElementById('searchReviewButton').click();  // 선택과 동시에 검색
                     });
                     suggestionsBox.appendChild(suggestionItem);
                 });
-            });
+            })
+            .catch(error => console.error('Error fetching the tickers:', error));
     });
 
     stockInput.addEventListener('blur', () => {
