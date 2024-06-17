@@ -1,5 +1,3 @@
-// scripts.js
-
 $(function() {
     loadReviews();
 
@@ -80,9 +78,12 @@ $(function() {
                     const newReview = $('<div>', { class: 'review' });
                     newReview.html(`
                         <h3>${stockName} vs VOO</h3>
-                        <img src="${file.download_url}" alt="${stockName} vs VOO" style="width: 100%;" onclick="showMplChart('${stockName}')">
+                        <img id="image-${stockName}" src="${file.download_url}" alt="${stockName} vs VOO" style="width: 100%;">
                     `);
                     reviewList.append(newReview);
+                    $(`#image-${stockName}`).on('click', function() {
+                        showMplChart(stockName);
+                    });
                 }
             });
         }).fail(function() {
