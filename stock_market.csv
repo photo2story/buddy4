@@ -8,7 +8,7 @@ ADSK,Autodesk Inc,NASDAQ,Technology,ADSK,Software - Application,1.454
 FSLR,First Solar Inc,NASDAQ,Technology,FSLR,Solar,1.368
 ENPH,Enphase Energy Inc,NASDAQ,Technology,ENPH,Solar,1.473
 CSIQ,Canadian Solar Inc,NASDAQ,Technology,CSIQ,Solar,1.256
-META,Meta Platforms Inc,NASDAQ,none,,,0
+META,Meta Platforms Inc,NASDAQ,none,,,0.0
 GOOG,Alphabet Inc Class C,NASDAQ,none,,,
 AVGO,Broadcom Inc,NASDAQ,none,,,
 ASML,ASML Holding NV ADR,NASDAQ,none,,,
@@ -3940,7 +3940,7 @@ NVO,Novo Nordisk A/S ADR,NYSE,none,,,
 XOM,Exxon Mobil Corp,NYSE,Energy,XOM,Oil & Gas Integrated,0.947
 JNJ,Johnson & Johnson,NYSE,Healthcare,JNJ,Drug Manufacturers - General,0.531
 PG,Procter & Gamble Co,NYSE,Consumer Defensive,PG,Household & Personal Products,0.414
-HD,Home Depot Inc,NYSE,Consumer Cyclical,HD,Home Improvement Retail,1
+HD,Home Depot Inc,NYSE,Consumer Cyclical,HD,Home Improvement Retail,1.0
 BRK.A,Berkshire Hathaway Inc Class A,NYSE,,BRK.A,,
 TM,Toyota Motor Corp ADR,NYSE,none,,,
 ABBV,AbbVie Inc,NYSE,none,,,
