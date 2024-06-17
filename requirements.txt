@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 pandas
 numpy
 discord.py
@@ -22,3 +23,30 @@ yahoo_earnings_calendar
 yahoo_fin
 requests_html
 mplfinance
+=======
+pandas
+numpy
+discord.py
+flask
+requests
+python-dotenv
+mojito2
+yfinance
+pandas_ta
+finance-datareader
+tradingview_ta
+investpy
+bs4
+datetime
+pyyaml
+typing
+matplotlib
+asyncio
+plotly
+tabulate
+yahoo_earnings_calendar
+yahoo_fin
+requests_html
+mplfinance
+flask_cors
+>>>>>>> 03601eee69192f3baba5a2cae56b2fe1d00c2426

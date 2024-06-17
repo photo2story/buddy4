@@ -1,0 +1,39 @@
+.autocomplete-suggestion {
+    padding: 8px;
+    cursor: pointer;
+    background-color: #fff;
+    border-bottom: 1px solid #ddd;
+}
+
+.autocomplete-suggestion:hover {
+    background-color: #f0f0f0;
+}
+
+#autocomplete-list {
+    position: absolute;
+    z-index: 1000;
+    border: 1px solid #ddd;
+    max-height: 200px;
+    overflow-y: auto;
+    width: 100%;
+    background-color: #fff; /* 배경색 설정 */
+}
+
+#stockName {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.review {
+    margin-bottom: 20px;
+}
+
+.review h3 {
+    margin: 0;
+    font-size: 18px;
+}
+
+.review img {
+    margin-top: 10px;
+}
+

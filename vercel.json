@@ -1,0 +1,17 @@
+{
+    "version": 2,
+    "routes": [
+      {
+        "src": "/api/save_search_history",
+        "methods": ["POST", "OPTIONS"],
+        "headers": {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "POST, OPTIONS",
+          "Access-Control-Allow-Headers": "Content-Type"
+        },
+        "dest": "/api/save_search_history.js"
+      }
+    ]
+  }
+  
+  

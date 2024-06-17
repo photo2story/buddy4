@@ -19,5 +19,6 @@ venv.*/
 # Ignore virtual environment files
 myenv/
 .env
-*.png
+# *.png
 *.csv
+.vercel
