@@ -92,7 +92,7 @@ $(function() {
     }
 
     function showMplChart(stockName) {
-        const url = `https://github.com/photo2story/buddy4/raw/main/result_mpl_${stockName}.png`;
+        const url = `https://raw.githubusercontent.com/photo2story/buddy4/main/result_mpl_${stockName}.png`;
         window.open(url, '_blank');
     }
 
