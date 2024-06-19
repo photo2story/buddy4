@@ -1,6 +1,6 @@
 pandas
-numpy==1.20.3
-pandas_ta==0.3.14b0
+numpy
+pandas_ta
 discord.py
 flask
 requests
