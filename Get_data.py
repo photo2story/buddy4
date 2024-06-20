@@ -1,4 +1,6 @@
 ## Get_data.py
+
+
 import yfinance as yf
 import pandas_ta as ta
 import pandas as pd
@@ -82,12 +84,10 @@ def get_stock_data(ticker, start_date, end_date):
     stock_data.ta.sma(close='Close', length=60, append=True)
     stock_data.ta.sma(close='Close', length=120, append=True)
     stock_data.ta.sma(close='Close', length=240, append=True)
-    stock_data.ta.stoch(high='High', low='Low', k=20, d=10, append=True)
-    stock_data.ta.stoch(high='High', low='Low', k=14, d=3, append=True)
+    stock_data.ta.stoch(high='high', low='low', k=20, d=10, append=True)
+    stock_data.ta.stoch(high='high', low='low', k=14, d=3, append=True)
     stock_data['Stock'] = ticker
 
-    # NaN 값을 0으로 대체
-    stock_data.fillna(0, inplace=True)
 
     # Industry 정보 추가
     sector_df = pd.read_csv('stock_market.csv')
@@ -114,6 +114,8 @@ def get_price_info(ticker):
     else:
         return "알 수 없음"
 
+
+
 if __name__ == "__main__":
     # Industry 정보 불러오기
     industry_info = load_industry_info()
@@ -124,5 +126,5 @@ if __name__ == "__main__":
     end_date = '2018-06-01'
   
     # 주식 데이터 가져오기
-    stock_data, min_stock_data_date = get_stock_data(ticker, start_date, end_date)
+    stock_data = get_stock_data(ticker, start_date, end_date)
     print(stock_data)
