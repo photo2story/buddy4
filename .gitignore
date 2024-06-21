@@ -22,3 +22,23 @@ myenv/
 # *.png
 *.csv
 .vercel
+
+# Ignore system files
+.DS_Store
+Thumbs.db
+
+# Ignore VS Code settings
+.vscode/
+
+# Ignore temporary files
+*.log
+*.tmp
+
+# Ignore cache directories
+.cache/
+
+# Ignore cloud shell files
+*.cloudshell/
+
+# Ignore other unnecessary files
+.idea/
